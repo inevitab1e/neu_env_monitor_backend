@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neu.edu.dao.AqiFeedbackDao">
+
+    <resultMap type="com.neu.edu.entity.AqiFeedbackEntity" id="aqiFeedbackMap">
+        <result property="afId" column="af_id"/>
+        <result property="telId" column="tel_id"/>
+        <result property="provinceId" column="province_id"/>
+        <result property="cityId" column="city_id"/>
+        <result property="address" column="address"/>
+        <result property="information" column="information"/>
+        <result property="estimatedGrade" column="estimated_grade"/>
+        <result property="afDate" column="af_date"/>
+        <result property="afTime" column="af_time"/>
+        <result property="gmId" column="gm_id"/>
+        <result property="assignDate" column="assign_date"/>
+        <result property="assignTime" column="assign_time"/>
+        <result property="state" column="state"/>
+        <result property="remarks" column="remarks"/>
+    </resultMap>
+
+
+</mapper>

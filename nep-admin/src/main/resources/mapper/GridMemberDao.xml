@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neu.edu.dao.GridMemberDao">
+
+    <resultMap type="com.neu.edu.entity.GridMemberEntity" id="gridMemberMap">
+        <result property="gmId" column="gm_id"/>
+        <result property="gmName" column="gm_name"/>
+        <result property="gmCode" column="gm_code"/>
+        <result property="password" column="password"/>
+        <result property="provinceId" column="province_id"/>
+        <result property="cityId" column="city_id"/>
+        <result property="tel" column="tel"/>
+        <result property="state" column="state"/>
+        <result property="remarks" column="remarks"/>
+    </resultMap>
+
+
+</mapper>

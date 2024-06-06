@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.neu.edu.dao.AdminDao">
+
+    <resultMap type="com.neu.edu.entity.AdminEntity" id="adminMap">
+        <result property="adminId" column="admin_id"/>
+        <result property="adminCode" column="admin_code"/>
+        <result property="password" column="password"/>
+        <result property="remarks" column="remarks"/>
+    </resultMap>
+
+
+</mapper>

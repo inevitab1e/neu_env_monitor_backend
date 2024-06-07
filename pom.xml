@@ -18,6 +18,12 @@
 
     <modules>
         <module>nep-admin</module>
+        <module>nep-supervisor</module>
+        <module>nep-grid</module>
+        <module>nep-location</module>
+        <module>nep-statistics</module>
+        <module>nep-aqi</module>
+        <module>nep-common</module>
     </modules>
 
     <properties>
@@ -30,6 +36,9 @@
         <jsoup.version>1.15.3</jsoup.version>
         <knife4j.version>2.0.9</knife4j.version>
         <lombok.version>1.18.24</lombok.version>
+        <spring-cloud-alibaba.version>2022.0.0.0-RC2</spring-cloud-alibaba.version>
+        <spring-cloud.version>2022.0.0</spring-cloud.version>
+
     </properties>
 
     <dependencies>
@@ -97,6 +106,22 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
+        </dependency>
+        <!--springcloud-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-dependencies</artifactId>
+            <version>${spring-cloud.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+        <!--nacos-->
+        <dependency>
+            <groupId>com.alibaba.cloud</groupId>
+            <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+            <version>${spring-cloud-alibaba.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
         </dependency>
     </dependencies>
 

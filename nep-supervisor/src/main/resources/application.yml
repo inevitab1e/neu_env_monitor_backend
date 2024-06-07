@@ -1,6 +1,6 @@
 spring:
   application:
-    name: admin_application
+    name: supervisor_application
   datasource:
     druid:
       #MySQL
@@ -28,9 +28,7 @@ spring:
         server-addr: 127.0.0.1:8848
 
 server:
-  port: 8100
-
+  port: 8600
 #mybatis-plus:
 #  configuration:
-
 #    cache-enabled: true

@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: admin_application
   datasource:
     druid:
       #MySQL
@@ -20,7 +22,15 @@ spring:
       stat-view-servlet:
         enabled: true
         url-pattern: /druid/*
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+
+server:
+  port: 8100
 
 #mybatis-plus:
 #  configuration:
+
 #    cache-enabled: true

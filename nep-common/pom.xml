@@ -9,7 +9,6 @@
     <artifactId>nep-common</artifactId>
     <packaging>jar</packaging>
     <description>nep-common</description>
-
     <build>
         <finalName>${project.artifactId}</finalName>
     </build>

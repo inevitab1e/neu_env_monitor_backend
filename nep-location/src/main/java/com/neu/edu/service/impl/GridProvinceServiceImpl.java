@@ -22,10 +22,10 @@ public class GridProvinceServiceImpl extends CrudServiceImpl<GridProvinceDao, Gr
 
     @Override
     public QueryWrapper<GridProvinceEntity> getWrapper(Map<String, Object> params){
-        String id = (String)params.get("id");
+        String provinceId = (String)params.get("provinceId");
 
         QueryWrapper<GridProvinceEntity> wrapper = new QueryWrapper<>();
-        wrapper.eq(StrUtil.isNotBlank(id), "id", id);
+        wrapper.eq(StrUtil.isNotBlank(provinceId), "province_id", provinceId);
 
         return wrapper;
     }

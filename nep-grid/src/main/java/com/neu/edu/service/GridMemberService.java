@@ -1,8 +1,14 @@
 package com.neu.edu.service;
 
+import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.service.CrudService;
+import com.neu.edu.common.utils.Result;
+import com.neu.edu.dto.AssignmentInfoDTO;
 import com.neu.edu.dto.GridMemberDTO;
 import com.neu.edu.entity.GridMemberEntity;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * 
@@ -12,4 +18,11 @@ import com.neu.edu.entity.GridMemberEntity;
  */
 public interface GridMemberService extends CrudService<GridMemberEntity, GridMemberDTO> {
 
+    List<GridMemberDTO> selectByGmCode(String gmCode);
+
+    Result<PageData<AssignmentInfoDTO>> getAssignments(Map<String, Object> params);
+
+    void confirm(AssignmentInfoDTO dto);
+
+    List<GridMemberDTO> getGridMemberByLocation(Map<String, Object> params);
 }

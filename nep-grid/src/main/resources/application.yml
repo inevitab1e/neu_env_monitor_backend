@@ -1,6 +1,6 @@
 spring:
   application:
-    name: grid_application
+    name: grid-service
   datasource:
     druid:
       #MySQL

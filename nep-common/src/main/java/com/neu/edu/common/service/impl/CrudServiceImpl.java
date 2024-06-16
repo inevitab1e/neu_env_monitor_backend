@@ -12,6 +12,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.ReflectionKit;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.service.CrudService;
 import com.neu.edu.common.utils.ConvertUtils;
@@ -22,22 +23,22 @@ import java.util.List;
 import java.util.Map;
 
 /**
- *  CRUD基础服务类
+ * CRUD基础服务类
  *
  * @author Mark sunlightcs@gmail.com
  */
 public abstract class CrudServiceImpl<M extends BaseMapper<T>, T, D> extends BaseServiceImpl<M, T> implements CrudService<T, D> {
 
     protected Class<D> currentDtoClass() {
-        return (Class<D>)ReflectionKit.getSuperClassGenericType(getClass(), CrudServiceImpl.class, 2);
+        return (Class<D>) ReflectionKit.getSuperClassGenericType(getClass(), CrudServiceImpl.class, 2);
     }
 
     @Override
     public PageData<D> page(Map<String, Object> params) {
-        IPage<T> page = baseDao.selectPage(
-            getPage(params, null, false),
-            getWrapper(params)
-        );
+        IPage<T> basePage = getPage(params, null, false);
+        QueryWrapper<T> queryWrapper = getWrapper(params);
+
+        IPage<T> page = baseDao.selectPage(basePage, queryWrapper);
 
         return getPageData(page, currentDtoClass());
     }

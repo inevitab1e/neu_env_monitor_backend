@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 /**
- * 
- *
  * @author FEI Bo neufeibo@gmail.com
  * @since 1.0.0 2024-06-06
  */
@@ -21,8 +19,8 @@ import java.util.Map;
 public class StatisticsServiceImpl extends CrudServiceImpl<StatisticsDao, StatisticsEntity, StatisticsDTO> implements StatisticsService {
 
     @Override
-    public QueryWrapper<StatisticsEntity> getWrapper(Map<String, Object> params){
-        String id = (String)params.get("id");
+    public QueryWrapper<StatisticsEntity> getWrapper(Map<String, Object> params) {
+        String id = (String) params.get("id");
 
         QueryWrapper<StatisticsEntity> wrapper = new QueryWrapper<>();
         wrapper.eq(StrUtil.isNotBlank(id), "id", id);

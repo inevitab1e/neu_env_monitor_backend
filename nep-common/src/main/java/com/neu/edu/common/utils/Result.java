@@ -24,10 +24,10 @@ import java.io.Serializable;
 public class Result<T> implements Serializable {
     private static final long serialVersionUID = 1L;
     /**
-     * 编码：0表示成功，其他值表示失败
+     * 编码：200表示成功，其他值表示失败
      */
-    @ApiModelProperty(value = "编码：0表示成功，其他值表示失败")
-    private int code = 0;
+    @ApiModelProperty(value = "编码：200表示成功，其他值表示失败")
+    private int code = 200;
     /**
      * 消息内容
      */
@@ -45,7 +45,7 @@ public class Result<T> implements Serializable {
     }
 
     public boolean success(){
-        return code == 0;
+        return code == 200;
     }
 
     public Result<T> error() {

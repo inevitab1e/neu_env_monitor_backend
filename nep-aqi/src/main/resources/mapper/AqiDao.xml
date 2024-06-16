@@ -5,7 +5,7 @@
 
     <resultMap type="com.neu.edu.entity.AqiEntity" id="aqiMap">
         <result property="aqiId" column="aqi_id"/>
-        <result property="chineseExplain" column="chinese_explain"/>
+        <result property="aqiCode" column="aqi_code"/>
         <result property="aqiExplain" column="aqi_explain"/>
         <result property="color" column="color"/>
         <result property="healthImpact" column="health_impact"/>

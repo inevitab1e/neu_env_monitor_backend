@@ -9,8 +9,17 @@
     <artifactId>nep-common</artifactId>
     <packaging>jar</packaging>
     <description>nep-common</description>
-    <build>
-        <finalName>${project.artifactId}</finalName>
-    </build>
+<!--    <build>-->
+<!--        <finalName>${project.artifactId}</finalName>-->
+<!--        <plugins>-->
+<!--            <plugin>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <attach>false</attach>-->
+<!--                </configuration>-->
+<!--            </plugin>-->
+<!--        </plugins>-->
+<!--    </build>-->
 
 </project>

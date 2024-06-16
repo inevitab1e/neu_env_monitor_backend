@@ -1,5 +1,6 @@
 package com.neu.edu.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -16,7 +17,8 @@ public class GridMemberEntity {
     /**
      * Grid Member ID
      */
-	private Integer gmId;
+    @TableId
+    private Integer gmId;
     /**
      * Grid Member Name
      */

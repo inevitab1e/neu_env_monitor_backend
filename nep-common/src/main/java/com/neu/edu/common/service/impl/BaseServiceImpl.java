@@ -67,7 +67,7 @@ public abstract class BaseServiceImpl<M extends BaseMapper<T>, T> implements Bas
         Page<T> page = new Page<>(curPage, limit);
 
         //分页参数
-        params.put(Constant.PAGE, page);
+//        params.put(Constant.PAGE, page);
 
         //排序字段
         String orderField = (String) params.get(Constant.ORDER_FIELD);

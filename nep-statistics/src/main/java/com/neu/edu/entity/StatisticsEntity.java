@@ -1,5 +1,6 @@
 package com.neu.edu.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -18,7 +19,8 @@ public class StatisticsEntity {
     /**
      * Statistics Information ID
      */
-	private Integer id;
+    @TableId
+    private Integer id;
     /**
      * Province Area ID
      */

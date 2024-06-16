@@ -1,6 +1,6 @@
 spring:
   application:
-    name: admin_application
+    name: admin-service
   datasource:
     druid:
       #MySQL

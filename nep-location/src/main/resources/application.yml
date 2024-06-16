@@ -1,6 +1,6 @@
 spring:
   application:
-    name: location_application
+    name: location-service
   datasource:
     druid:
       #MySQL

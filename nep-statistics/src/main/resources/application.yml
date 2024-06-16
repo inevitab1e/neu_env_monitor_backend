@@ -1,6 +1,6 @@
 spring:
   application:
-    name: statistic_application
+    name: statistic-service
   datasource:
     druid:
       #MySQL

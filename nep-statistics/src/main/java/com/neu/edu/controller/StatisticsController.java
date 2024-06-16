@@ -47,7 +47,6 @@ public class StatisticsController {
     @RequiresPermissions("demo:statistics:page")
     public Result<PageData<StatisticsDTO>> page(@ApiIgnore @RequestParam Map<String, Object> params){
         PageData<StatisticsDTO> page = statisticsService.page(params);
-
         return new Result<PageData<StatisticsDTO>>().ok(page);
     }
 
@@ -60,7 +59,7 @@ public class StatisticsController {
         return new Result<StatisticsDTO>().ok(data);
     }
 
-    @PostMapping
+    @PostMapping("save")
     @ApiOperation("保存")
     @LogOperation("保存")
     @RequiresPermissions("demo:statistics:save")

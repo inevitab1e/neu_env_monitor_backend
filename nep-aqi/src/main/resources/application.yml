@@ -1,6 +1,6 @@
 spring:
   application:
-    name: aqi_application
+    name: aqi-service
   datasource:
     druid:
       #MySQL

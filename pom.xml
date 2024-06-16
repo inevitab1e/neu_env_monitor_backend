@@ -23,6 +23,7 @@
         <module>nep-location</module>
         <module>nep-statistics</module>
         <module>nep-aqi</module>
+        <module>nep-aqifeedback</module>
         <module>nep-common</module>
     </modules>
 
@@ -36,8 +37,8 @@
         <jsoup.version>1.15.3</jsoup.version>
         <knife4j.version>2.0.9</knife4j.version>
         <lombok.version>1.18.24</lombok.version>
-        <spring-cloud-alibaba.version>2022.0.0.0-RC2</spring-cloud-alibaba.version>
-        <spring-cloud.version>2022.0.0</spring-cloud.version>
+        <spring-cloud-alibaba.version>2021.0.5.0</spring-cloud-alibaba.version>
+        <spring-cloud.version>2021.0.5</spring-cloud.version>
 
     </properties>
 
@@ -122,6 +123,18 @@
             <version>${spring-cloud-alibaba.version}</version>
             <type>pom</type>
             <scope>import</scope>
+        </dependency>
+        <!--OpenFeign-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-openfeign</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        <!--负载均衡-->
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-loadbalancer</artifactId>
+            <version>3.1.1</version>
         </dependency>
     </dependencies>
 

@@ -21,8 +21,8 @@ public class AqiDTO implements Serializable {
 	@ApiModelProperty(value = "Air Quality Index Level (total of six levels)")
 	private Integer aqiId;
 
-	@ApiModelProperty(value = "Chinese representation of Air Quality Index level")
-	private String chineseExplain;
+	@ApiModelProperty(value = "Representation of Air Quality Index level")
+	private String aqiCode;
 
 	@ApiModelProperty(value = "Description of Air Quality Index level")
 	private String aqiExplain;

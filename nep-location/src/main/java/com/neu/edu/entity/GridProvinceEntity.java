@@ -1,5 +1,6 @@
 package com.neu.edu.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -18,7 +19,8 @@ public class GridProvinceEntity {
     /**
      * System Grid Coverage Province Area ID
      */
-	private Integer provinceId;
+    @TableId
+    private Integer provinceId;
     /**
      * System Grid Coverage Province Area Name
      */

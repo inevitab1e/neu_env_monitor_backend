@@ -1,5 +1,6 @@
 package com.neu.edu.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -16,11 +17,12 @@ public class AqiEntity {
     /**
      * Air Quality Index Level (total of six levels)
      */
-	private Integer aqiId;
+	@TableId
+    private Integer aqiId;
     /**
-     * Chinese representation of Air Quality Index level
+     * Representation of Air Quality Index level
      */
-	private String chineseExplain;
+	private String aqiCode;
     /**
      * Description of Air Quality Index level
      */

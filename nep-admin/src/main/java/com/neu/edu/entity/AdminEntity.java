@@ -1,5 +1,6 @@
 package com.neu.edu.entity;
 
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
@@ -16,7 +17,8 @@ public class AdminEntity {
     /**
      * System administrator ID
      */
-	private Integer adminId;
+	@TableId
+    private Integer adminId;
     /**
      * System administrator login code
      */

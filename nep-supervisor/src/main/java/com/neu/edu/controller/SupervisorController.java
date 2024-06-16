@@ -1,5 +1,6 @@
 package com.neu.edu.controller;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.neu.edu.common.annotation.LogOperation;
 import com.neu.edu.common.constant.Constant;
 import com.neu.edu.common.page.PageData;
@@ -9,18 +10,21 @@ import com.neu.edu.common.validator.ValidatorUtils;
 import com.neu.edu.common.validator.group.AddGroup;
 import com.neu.edu.common.validator.group.DefaultGroup;
 import com.neu.edu.common.validator.group.UpdateGroup;
+import com.neu.edu.dto.AqiDTO;
+import com.neu.edu.dto.AqiFeedbackDTO;
 import com.neu.edu.dto.SupervisorDTO;
 import com.neu.edu.service.SupervisorService;
+import com.neu.edu.vo.SupervisorAqiFeedbackRecordVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +34,7 @@ import java.util.Map;
  * @since 1.0.0 2024-06-06
  */
 @RestController
-@RequestMapping("demo/supervisor")
+@RequestMapping("nep/supervisor")
 @Api(tags = "")
 public class SupervisorController {
     @Autowired
@@ -51,20 +55,62 @@ public class SupervisorController {
         return new Result<PageData<SupervisorDTO>>().ok(page);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("{telId}")
     @ApiOperation("信息")
     @RequiresPermissions("demo:supervisor:info")
-    public Result<SupervisorDTO> get(@PathVariable("id") Long id) {
-        SupervisorDTO data = supervisorService.get(id);
+    public Result<SupervisorDTO> get(@PathVariable("telId") String telId) {
+        SupervisorDTO data = supervisorService.selectByTelId(telId);
 
         return new Result<SupervisorDTO>().ok(data);
     }
 
-    @PostMapping
-    @ApiOperation("保存")
-    @LogOperation("保存")
-    @RequiresPermissions("demo:supervisor:save")
-    public Result save(@RequestBody SupervisorDTO dto) {
+    @PostMapping("login")
+    @ApiOperation("登录")
+    public Result<SupervisorDTO> login(@RequestParam("telId") String telId, @RequestParam("password") String password) {
+        SupervisorDTO data = supervisorService.selectByTelId(telId);
+
+        if (data == null) {
+            return new Result<SupervisorDTO>().error(403, "账号不存在");
+        }
+
+        if (data.getPassword().equals(password)) {
+            return new Result<SupervisorDTO>().ok(data);
+        }
+
+        return new Result<SupervisorDTO>().error(403, "密码错误");
+    }
+
+    @GetMapping("aqi_list")
+    @ApiOperation("获取AQI列表")
+    public Result<List<AqiDTO>> getAqiList() {
+        Result<List<AqiDTO>> result = supervisorService.getAqiList();
+        if (CollectionUtils.isEmpty(result.getData())) {
+            return new Result<List<AqiDTO>>().error(403, "获取数据失败");
+        }
+        return result;
+    }
+
+    @ApiOperation("获取反馈记录")
+    @GetMapping("records")
+    public Result<PageData<SupervisorAqiFeedbackRecordVO>> pageRecords(@ApiIgnore @RequestParam Map<String, Object> params) {
+        Result<PageData<SupervisorAqiFeedbackRecordVO>> pageDataResult = supervisorService.pageRecords(params);
+        if (CollectionUtils.isEmpty(pageDataResult.getData().getList())) {
+            return new Result<PageData<SupervisorAqiFeedbackRecordVO>>().error(403, "未找到相关记录");
+        }
+        return pageDataResult;
+    }
+
+    @PostMapping("save_aqifeedback")
+    public Result saveAqiFeedback(@RequestBody AqiFeedbackDTO dto) {
+        supervisorService.saveAqiFeedback(dto);
+        return new Result();
+    }
+
+
+    @PostMapping("/sign_in")
+    @ApiOperation("注册")
+    @LogOperation("注册")
+    public Result signIn(@RequestBody SupervisorDTO dto) {
         //效验数据
         ValidatorUtils.validateEntity(dto, AddGroup.class, DefaultGroup.class);
 

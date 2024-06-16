@@ -1,25 +1,29 @@
 package com.neu.edu.controller;
 
 import com.neu.edu.common.annotation.LogOperation;
+import com.neu.edu.common.constant.Constant;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.utils.Result;
 import com.neu.edu.dto.AdminDTO;
-import com.neu.edu.common.constant.Constant;
 import com.neu.edu.common.validator.AssertUtils;
 import com.neu.edu.common.validator.ValidatorUtils;
 import com.neu.edu.common.validator.group.AddGroup;
 import com.neu.edu.common.validator.group.DefaultGroup;
 import com.neu.edu.common.validator.group.UpdateGroup;
-import com.neu.edu.service.AdminsService;
+import com.neu.edu.dto.AqiFeedbackDetailDTO;
+import com.neu.edu.dto.GridMemberDTO;
+import com.neu.edu.service.AdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
+import java.util.List;
 import java.util.Map;
 
 
@@ -28,35 +32,55 @@ import java.util.Map;
  * @since 1.0.0 2024-06-06
  */
 @RestController
-@RequestMapping("demo/admin")
+@RequestMapping("nep/admin")
 @Api(tags = "")
 public class AdminController {
     @Autowired
-    private AdminsService adminsService;
+    private AdminService adminsService;
 
-    @GetMapping("page")
-    @ApiOperation("分页")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = Constant.PAGE, value = "当前页码，从1开始", paramType = "query", required = true, dataType = "int"),
-            @ApiImplicitParam(name = Constant.LIMIT, value = "每页显示记录数", paramType = "query", required = true, dataType = "int"),
-            @ApiImplicitParam(name = Constant.ORDER_FIELD, value = "排序字段", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = Constant.ORDER, value = "排序方式，可选值(asc、desc)", paramType = "query", dataType = "String")
-    })
-    @RequiresPermissions("demo:admin:page")
-    public Result<PageData<AdminDTO>> page(@ApiIgnore @RequestParam Map<String, Object> params) {
-        PageData<AdminDTO> page = adminsService.page(params);
-
-        return new Result<PageData<AdminDTO>>().ok(page);
-    }
-
-    @GetMapping("{id}")
+    @GetMapping("{adminId}")
     @ApiOperation("信息")
     @RequiresPermissions("demo:admin:info")
-    public Result<AdminDTO> get(@PathVariable("id") Long id) {
-        AdminDTO data = adminsService.get(id);
+    public Result<AdminDTO> get(@PathVariable("adminId") Long adminId) {
+        System.out.println("adminId:" + adminId);
+        AdminDTO data = adminsService.get(adminId);
 
         return new Result<AdminDTO>().ok(data);
     }
+
+    @PostMapping("login")
+    public Result<AdminDTO> login(@RequestParam("adminCode") String adminCode, @RequestParam("password") String password) {
+        List<AdminDTO> adminDTOList = adminsService.selectByAdminCode(adminCode);
+
+        if (CollectionUtils.isEmpty(adminDTOList)) {
+            return new Result<AdminDTO>().error(403, "账号不存在");
+        }
+
+        for (AdminDTO adminDTO : adminDTOList) {
+            if (adminDTO.getPassword().equals(password)) {
+                return new Result<AdminDTO>().ok(adminDTO);
+            }
+        }
+
+        return new Result<AdminDTO>().error(403, "密码错误");
+    }
+
+    @GetMapping("page_aqifeedback_detail")
+    public Result<PageData<AqiFeedbackDetailDTO>> getAqiFeedbackDetailPage(@RequestParam Map<String, Object> params) {
+        Result<PageData<AqiFeedbackDetailDTO>> result = adminsService.getAqiFeedbackDetailPage(params);
+        return result;
+    }
+
+    @GetMapping("get_gridmember_by_location")
+    public Result<List<GridMemberDTO>> getGridMemberListByLocation(@RequestParam Map<String, Object> params) {
+        Result<List<GridMemberDTO>> result = adminsService.getGridMemberListByLocation(params);
+        return result;
+    }
+
+//    @PostMapping
+//    public Result assign(@RequestBody AssignDTO dto){
+//
+//    }
 
     @PostMapping
     @ApiOperation("保存")

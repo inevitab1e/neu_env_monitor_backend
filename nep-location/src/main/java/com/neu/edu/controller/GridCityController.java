@@ -10,6 +10,7 @@ import com.neu.edu.common.validator.ValidatorUtils;
 import com.neu.edu.common.validator.group.AddGroup;
 import com.neu.edu.common.validator.group.DefaultGroup;
 import com.neu.edu.common.validator.group.UpdateGroup;
+import com.neu.edu.dto.GridProvinceDTO;
 import com.neu.edu.service.GridCityService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -17,23 +18,23 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
 /**
- * 
- *
  * @author FEI Bo neufeibo@gmail.com
  * @since 1.0.0 2024-06-06
  */
 @RestController
-@RequestMapping("demo/gridcity")
-@Api(tags="")
+@RequestMapping("nep/gridcity")
+@Api(tags = "")
 public class GridCityController {
     @Autowired
     private GridCityService gridCityService;
@@ -41,32 +42,46 @@ public class GridCityController {
     @GetMapping("page")
     @ApiOperation("分页")
     @ApiImplicitParams({
-        @ApiImplicitParam(name = Constant.PAGE, value = "当前页码，从1开始", paramType = "query", required = true, dataType="int") ,
-        @ApiImplicitParam(name = Constant.LIMIT, value = "每页显示记录数", paramType = "query",required = true, dataType="int") ,
-        @ApiImplicitParam(name = Constant.ORDER_FIELD, value = "排序字段", paramType = "query", dataType="String") ,
-        @ApiImplicitParam(name = Constant.ORDER, value = "排序方式，可选值(asc、desc)", paramType = "query", dataType="String")
+            @ApiImplicitParam(name = Constant.PAGE, value = "当前页码，从1开始", paramType = "query", required = true, dataType = "int"),
+            @ApiImplicitParam(name = Constant.LIMIT, value = "每页显示记录数", paramType = "query", required = true, dataType = "int"),
+            @ApiImplicitParam(name = Constant.ORDER_FIELD, value = "排序字段", paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = Constant.ORDER, value = "排序方式，可选值(asc、desc)", paramType = "query", dataType = "String")
     })
     @RequiresPermissions("demo:gridcity:page")
-    public Result<PageData<GridCityDTO>> page(@ApiIgnore @RequestParam Map<String, Object> params){
+    public Result<PageData<GridCityDTO>> page(@ApiIgnore @RequestParam Map<String, Object> params) {
         PageData<GridCityDTO> page = gridCityService.page(params);
 
         return new Result<PageData<GridCityDTO>>().ok(page);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("{cityId}")
     @ApiOperation("信息")
     @RequiresPermissions("demo:gridcity:info")
-    public Result<GridCityDTO> get(@PathVariable("id") Long id){
-        GridCityDTO data = gridCityService.get(id);
+    public Result<GridCityDTO> getCityById(@PathVariable("cityId") Long cityId) {
+        GridCityDTO data = gridCityService.get(cityId);
 
         return new Result<GridCityDTO>().ok(data);
+    }
+
+    @GetMapping("/get_province/{provinceId}")
+    @ApiOperation("根据省查找其含有的市")
+    public Result<List<GridCityDTO>> getCityByProvinceId(@PathVariable("provinceId") String provinceId) {
+        HashMap<String, Object> params = new HashMap<>();
+        params.put("provinceId", provinceId);
+        List<GridCityDTO> data = gridCityService.list(params);
+
+        if (CollectionUtils.isEmpty(data)) {
+            return new Result<List<GridCityDTO>>().error("没有找到该省下的市");
+        }
+
+        return new Result<List<GridCityDTO>>().ok(data);
     }
 
     @PostMapping
     @ApiOperation("保存")
     @LogOperation("保存")
     @RequiresPermissions("demo:gridcity:save")
-    public Result save(@RequestBody GridCityDTO dto){
+    public Result save(@RequestBody GridCityDTO dto) {
         //效验数据
         ValidatorUtils.validateEntity(dto, AddGroup.class, DefaultGroup.class);
 
@@ -79,7 +94,7 @@ public class GridCityController {
     @ApiOperation("修改")
     @LogOperation("修改")
     @RequiresPermissions("demo:gridcity:update")
-    public Result update(@RequestBody GridCityDTO dto){
+    public Result update(@RequestBody GridCityDTO dto) {
         //效验数据
         ValidatorUtils.validateEntity(dto, UpdateGroup.class, DefaultGroup.class);
 
@@ -92,7 +107,7 @@ public class GridCityController {
     @ApiOperation("删除")
     @LogOperation("删除")
     @RequiresPermissions("demo:gridcity:delete")
-    public Result delete(@RequestBody Long[] ids){
+    public Result delete(@RequestBody Long[] ids) {
         //效验数据
         AssertUtils.isArrayEmpty(ids, "id");
 

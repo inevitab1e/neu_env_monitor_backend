@@ -63,19 +63,20 @@ public class GridCityController {
         return new Result<GridCityDTO>().ok(data);
     }
 
-    @GetMapping("/get_province/{provinceId}")
-    @ApiOperation("根据省查找其含有的市")
-    public Result<List<GridCityDTO>> getCityByProvinceId(@PathVariable("provinceId") String provinceId) {
-        HashMap<String, Object> params = new HashMap<>();
-        params.put("provinceId", provinceId);
-        List<GridCityDTO> data = gridCityService.list(params);
-
-        if (CollectionUtils.isEmpty(data)) {
-            return new Result<List<GridCityDTO>>().error("没有找到该省下的市");
-        }
-
-        return new Result<List<GridCityDTO>>().ok(data);
-    }
+//    // 路径要改
+//    @GetMapping("/get_province/{provinceId}")
+//    @ApiOperation("根据省查找其含有的市")
+//    public Result<List<GridCityDTO>> getCityByProvinceId(@PathVariable("provinceId") String provinceId) {
+//        HashMap<String, Object> params = new HashMap<>();
+//        params.put("provinceId", provinceId);
+//        List<GridCityDTO> data = gridCityService.list(params);
+//
+//        if (CollectionUtils.isEmpty(data)) {
+//            return new Result<List<GridCityDTO>>().error("没有找到该省下的市");
+//        }
+//
+//        return new Result<List<GridCityDTO>>().ok(data);
+//    }
 
     @PostMapping
     @ApiOperation("保存")

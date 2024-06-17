@@ -51,11 +51,11 @@ public class GridMemberController {
         return new Result<PageData<GridMemberDTO>>().ok(page);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("{gmId}")
     @ApiOperation("信息")
     @RequiresPermissions("demo:gridmember:info")
-    public Result<GridMemberDTO> get(@PathVariable("id") Long id) {
-        GridMemberDTO data = gridMemberService.get(id);
+    public Result<GridMemberDTO> get(@PathVariable("gmId") Long gmId) {
+        GridMemberDTO data = gridMemberService.get(gmId);
 
         return new Result<GridMemberDTO>().ok(data);
     }
@@ -95,6 +95,11 @@ public class GridMemberController {
     }
 
     @GetMapping("get_gridmember_by_location")
+    @ApiOperation("根据位置获取网格成员列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "provinceId", value = "省id", paramType = "query", required = true, dataType = "int"),
+            @ApiImplicitParam(name = "cityId", value = "城市id", paramType = "query", required = true, dataType = "int")
+    })
     public Result<List<GridMemberDTO>> getGridMemberByLocation(@RequestParam Map<String, Object> params) {
         List<GridMemberDTO> gridMemberDTOList = gridMemberService.getGridMemberByLocation(params);
         if (gridMemberDTOList == null) {

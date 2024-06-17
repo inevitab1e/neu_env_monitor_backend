@@ -1,5 +1,6 @@
 package com.neu.edu.controller;
 
+import cn.hutool.db.Page;
 import com.neu.edu.common.annotation.LogOperation;
 import com.neu.edu.common.constant.Constant;
 import com.neu.edu.common.page.PageData;
@@ -11,8 +12,12 @@ import com.neu.edu.common.validator.group.AddGroup;
 import com.neu.edu.common.validator.group.DefaultGroup;
 import com.neu.edu.common.validator.group.UpdateGroup;
 import com.neu.edu.dto.AqiFeedbackDetailDTO;
+import com.neu.edu.dto.ConfirmedAqiFeedbackDTO;
 import com.neu.edu.dto.GridMemberDTO;
 import com.neu.edu.service.AdminService;
+import com.neu.edu.vo.AqiCountVO;
+import com.neu.edu.vo.AqiMonthCountVO;
+import com.neu.edu.vo.ProvinceAqiIndexVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -21,7 +26,6 @@ import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.Map;
@@ -38,17 +42,8 @@ public class AdminController {
     @Autowired
     private AdminService adminsService;
 
-    @GetMapping("{adminId}")
-    @ApiOperation("信息")
-    @RequiresPermissions("demo:admin:info")
-    public Result<AdminDTO> get(@PathVariable("adminId") Long adminId) {
-        System.out.println("adminId:" + adminId);
-        AdminDTO data = adminsService.get(adminId);
-
-        return new Result<AdminDTO>().ok(data);
-    }
-
     @PostMapping("login")
+    @ApiOperation("管理员登录")
     public Result<AdminDTO> login(@RequestParam("adminCode") String adminCode, @RequestParam("password") String password) {
         List<AdminDTO> adminDTOList = adminsService.selectByAdminCode(adminCode);
 
@@ -66,21 +61,71 @@ public class AdminController {
     }
 
     @GetMapping("page_aqifeedback_detail")
+    @ApiOperation("分页得到AQI反馈详情")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = Constant.PAGE, value = "当前页码，从1开始", paramType = "query", required = true, dataType = "int"),
+            @ApiImplicitParam(name = Constant.LIMIT, value = "每页显示记录数", paramType = "query", required = true, dataType = "int"),
+            @ApiImplicitParam(name = Constant.ORDER_FIELD, value = "排序字段", paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = Constant.ORDER, value = "排序方式，可选值(asc、desc)", paramType = "query", dataType = "String")
+    })
     public Result<PageData<AqiFeedbackDetailDTO>> getAqiFeedbackDetailPage(@RequestParam Map<String, Object> params) {
         Result<PageData<AqiFeedbackDetailDTO>> result = adminsService.getAqiFeedbackDetailPage(params);
         return result;
     }
 
     @GetMapping("get_gridmember_by_location")
+    @ApiOperation("根据位置获取网格员列表")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "provinceId", value = "省id", paramType = "query", required = true, dataType = "int"),
+            @ApiImplicitParam(name = "cityId", value = "城市id", paramType = "query", required = true, dataType = "int")
+    })
     public Result<List<GridMemberDTO>> getGridMemberListByLocation(@RequestParam Map<String, Object> params) {
         Result<List<GridMemberDTO>> result = adminsService.getGridMemberListByLocation(params);
         return result;
     }
 
-//    @PostMapping
+    @GetMapping("page_confirmed_aqifeedback")
+    @ApiOperation("分页得到已确认的AQI反馈")
+    public Result<PageData<ConfirmedAqiFeedbackDTO>> getConfirmedAqiFeedbackPage(@RequestParam Map<String, Object> params) {
+        Result<PageData<ConfirmedAqiFeedbackDTO>> result = adminsService.getConfirmedAqiFeedbackPage(params);
+        return result;
+    }
+
+    @GetMapping("get_province_aqi_index_exceeded_info")
+    @ApiOperation("获取省份aqi指数超标信息")
+    public Result<List<ProvinceAqiIndexVO>> getProvinceAqiIndexExceededInfo() {
+        Result<List<ProvinceAqiIndexVO>> data = adminsService.getProvinceAqiIndexExceededInfo();
+        return data;
+    }
+
+    @GetMapping("get_aqi_count_info")
+    @ApiOperation("获取aqi指数统计信息")
+    public Result<List<AqiCountVO>> getAqiCountInfo() {
+        Result<List<AqiCountVO>> data = adminsService.getAqiCountInfo();
+        return data;
+    }
+
+    @GetMapping("get_aqi_month_count_info")
+    @ApiOperation("获取aqi指数月统计信息")
+    public Result<List<AqiMonthCountVO>> getAqiMonthCountInfo() {
+        Result<List<AqiMonthCountVO>> data = adminsService.getAqiMonthCountInfo();
+        return data;
+    }
+
+    //    @PostMapping
 //    public Result assign(@RequestBody AssignDTO dto){
 //
 //    }
+
+    @GetMapping("{adminId}")
+    @ApiOperation("信息")
+    @RequiresPermissions("demo:admin:info")
+    public Result<AdminDTO> get(@PathVariable("adminId") Long adminId) {
+        System.out.println("adminId:" + adminId);
+        AdminDTO data = adminsService.get(adminId);
+
+        return new Result<AdminDTO>().ok(data);
+    }
 
     @PostMapping
     @ApiOperation("保存")

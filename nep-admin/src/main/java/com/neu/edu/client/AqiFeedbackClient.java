@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Map;
 
 @FeignClient(value = "aqifeedback-service")
-
 public interface AqiFeedbackClient {
     @GetMapping("nep/aqifeedback/page")
     Result<PageData<AqiFeedbackDTO>> page(@RequestParam Map<String, Object> params);

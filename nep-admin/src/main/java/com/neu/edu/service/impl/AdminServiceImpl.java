@@ -12,8 +12,12 @@ import com.neu.edu.common.service.impl.CrudServiceImpl;
 import com.neu.edu.entity.AdminEntity;
 import com.neu.edu.service.AdminService;
 import cn.hutool.core.util.StrUtil;
+import com.neu.edu.vo.AqiCountVO;
+import com.neu.edu.vo.AqiMonthCountVO;
+import com.neu.edu.vo.ProvinceAqiIndexVO;
 import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
+import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -29,11 +33,11 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AdminServiceImpl extends CrudServiceImpl<AdminDao, AdminEntity, AdminDTO> implements AdminService {
 
-    //    private final AqiClient aqiClient;
     private final AqiFeedbackClient aqiFeedbackClient;
     private final LocationClient locationClient;
     private final SupervisorClient supervisorClient;
     private final GridClient gridClient;
+    private final StatisticsClient statisticsClient;
 
     @Override
     public QueryWrapper<AdminEntity> getWrapper(Map<String, Object> params) {
@@ -51,7 +55,6 @@ public class AdminServiceImpl extends CrudServiceImpl<AdminDao, AdminEntity, Adm
         return wrapper;
     }
 
-
     @Override
     public List<AdminDTO> selectByAdminCode(String adminCode) {
         Map<String, Object> params = new HashMap<>();
@@ -63,13 +66,13 @@ public class AdminServiceImpl extends CrudServiceImpl<AdminDao, AdminEntity, Adm
 
     @Override
     public Result<PageData<AqiFeedbackDetailDTO>> getAqiFeedbackDetailPage(Map<String, Object> params) {
-        Result<PageData<AqiFeedbackDTO>> basePageResult = aqiFeedbackClient.page(params);
-        if (CollectionUtils.isEmpty(basePageResult.getData().getList())) {
+        Result<PageData<AqiFeedbackDTO>> basePage = aqiFeedbackClient.page(params);
+        if (CollectionUtils.isEmpty(basePage.getData().getList())) {
             return new Result<PageData<AqiFeedbackDetailDTO>>().error("未查询到数据");
         }
 
-        int total = basePageResult.getData().getTotal();
-        List<AqiFeedbackDTO> aqiFeedbackDTOS = basePageResult.getData().getList();
+        int total = basePage.getData().getTotal();
+        List<AqiFeedbackDTO> aqiFeedbackDTOS = basePage.getData().getList();
         List<AqiFeedbackDetailDTO> aqiFeedbackDetailDTOS = ConvertUtils.sourceToTarget(aqiFeedbackDTOS, AqiFeedbackDetailDTO.class);
 
         for (AqiFeedbackDetailDTO aqiFeedbackDetailDTO : aqiFeedbackDetailDTOS) {
@@ -90,8 +93,8 @@ public class AdminServiceImpl extends CrudServiceImpl<AdminDao, AdminEntity, Adm
             aqiFeedbackDetailDTO.setProvinceName(provinceName);
         }
 
-        PageData<AqiFeedbackDetailDTO> pageData = new PageData<>(aqiFeedbackDetailDTOS, total);
-        return new Result<PageData<AqiFeedbackDetailDTO>>().ok(pageData);
+        PageData<AqiFeedbackDetailDTO> pageResult = new PageData<>(aqiFeedbackDetailDTOS, total);
+        return new Result<PageData<AqiFeedbackDetailDTO>>().ok(pageResult);
     }
 
     @Override
@@ -101,7 +104,55 @@ public class AdminServiceImpl extends CrudServiceImpl<AdminDao, AdminEntity, Adm
     }
 
     @Override
-    public AdminDTO get(Long id) {
-        return super.get(id);
+    public Result<PageData<ConfirmedAqiFeedbackDTO>> getConfirmedAqiFeedbackPage(Map<String, Object> params) {
+        Result<PageData<StatisticsDTO>> basePage = statisticsClient.page(params);
+        List<StatisticsDTO> statisticsDTOS = basePage.getData().getList();
+        int total = basePage.getData().getTotal();
+
+        List<ConfirmedAqiFeedbackDTO> confirmedAqiFeedbackDTOS = ConvertUtils.sourceToTarget(statisticsDTOS, ConfirmedAqiFeedbackDTO.class);
+
+        for (ConfirmedAqiFeedbackDTO confirmedAqiFeedbackDTO : confirmedAqiFeedbackDTOS) {
+            String provinceName = locationClient.getProvinceById(confirmedAqiFeedbackDTO.getProvinceId()).getData().getProvinceName();
+            confirmedAqiFeedbackDTO.setProvinceName(provinceName);
+
+            String cityName = locationClient.getCityByid(confirmedAqiFeedbackDTO.getCityId()).getData().getCityName();
+            confirmedAqiFeedbackDTO.setCityName(cityName);
+
+            GridMemberDTO gridMemberDTO = gridClient.get(confirmedAqiFeedbackDTO.getGmId().longValue()).getData();
+            String gmName = gridMemberDTO.getGmName();
+            String tel = gridMemberDTO.getTel();
+            confirmedAqiFeedbackDTO.setGmName(gmName);
+            confirmedAqiFeedbackDTO.setTel(tel);
+
+            String fdName = supervisorClient.get(confirmedAqiFeedbackDTO.getFdId()).getData().getRealName();
+            confirmedAqiFeedbackDTO.setFdName(fdName);
+        }
+
+        PageData<ConfirmedAqiFeedbackDTO> pageResult = new PageData<>(confirmedAqiFeedbackDTOS, total);
+
+        return new Result<PageData<ConfirmedAqiFeedbackDTO>>().ok(pageResult);
     }
+
+    @Override
+    public Result<List<ProvinceAqiIndexVO>> getProvinceAqiIndexExceededInfo() {
+        Result<List<ProvinceAqiIndexVO>> result = statisticsClient.getProvinceAqiIndexExceededInfo();
+        return result;
+    }
+
+    @Override
+    public Result<List<AqiCountVO>> getAqiCountInfo() {
+        Result<List<AqiCountVO>> result = statisticsClient.getAqiCountInfo();
+        return result;
+    }
+
+    @Override
+    public Result<List<AqiMonthCountVO>> getAqiMonthCountInfo() {
+        Result<List<AqiMonthCountVO>> result = statisticsClient.getAqiMonthCountInfo();
+        return result;
+    }
+
+//    @Override
+//    public AdminDTO get(Long id) {
+//        return super.get(id);
+//    }
 }

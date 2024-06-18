@@ -11,9 +11,7 @@ import com.neu.edu.common.validator.group.AddGroup;
 import com.neu.edu.common.validator.group.DefaultGroup;
 import com.neu.edu.common.validator.group.UpdateGroup;
 import com.neu.edu.service.StatisticsService;
-import com.neu.edu.vo.AqiCountVO;
-import com.neu.edu.vo.AqiMonthCountVO;
-import com.neu.edu.vo.ProvinceAqiIndexVO;
+import com.neu.edu.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -58,6 +56,21 @@ public class StatisticsController {
         Result<List<AqiMonthCountVO>> data = statisticsService.getAqiMonthCountInfo();
         return data;
     }
+
+    @GetMapping("get_coverage_info")
+    @ApiOperation("获取覆盖率统计信息")
+    public Result<CoverageVO> getCoverageInfo() {
+        Result<CoverageVO> data = statisticsService.getCoverageInfo();
+        return data;
+    }
+
+    @GetMapping("get_summary_data_info")
+    @ApiOperation("获取汇总数据统计信息 总数 优良 污染")
+    public Result<SummaryDataVO> getSummaryDataInfo() {
+        Result<SummaryDataVO> data = statisticsService.getSummaryDataInfo();
+        return data;
+    }
+
 
     @GetMapping("page")
     @ApiOperation("分页")

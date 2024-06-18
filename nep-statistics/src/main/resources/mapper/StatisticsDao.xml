@@ -23,83 +23,102 @@
         <result property="remarks" column="remarks"/>
     </resultMap>
 
-    <select id="getProvinceAqiIndexExceededInfo" resultType="com.neu.edu.vo.ProvinceAqiIndexVO">
-        SELECT gp.province_id,
-               gp.province_abbr,
-               gp.province_name,
-               COUNT(CASE WHEN s.so2_level >= 3 THEN 1 ELSE NULL END) AS so2ExceededCount,
-               COUNT(CASE WHEN s.co_level >= 3 THEN 1 ELSE NULL END)  AS coExceededCount,
-               COUNT(CASE WHEN s.spm_level >= 3 THEN 1 ELSE NULL END) AS spmExceededCount,
-               COUNT(CASE WHEN s.aqi_id >= 3 THEN 1 ELSE NULL END)    AS aqiExceededCount
-        FROM grid_province gp
-                 LEFT JOIN statistics s
-                           ON gp.province_id = s.province_id
-        GROUP BY gp.province_id
-        ORDER BY gp.province_id;
-    </select>
+<!--    <select id="getProvinceAqiIndexExceededInfo" resultType="com.neu.edu.vo.ProvinceAqiIndexVO">-->
+<!--        SELECT gp.province_id,-->
+<!--               gp.province_abbr,-->
+<!--               gp.province_name,-->
+<!--               COUNT(CASE WHEN s.so2_level >= 3 THEN 1 ELSE NULL END) AS so2_exceeded_count,-->
+<!--               COUNT(CASE WHEN s.co_level >= 3 THEN 1 ELSE NULL END)  AS co_exceeded_count,-->
+<!--               COUNT(CASE WHEN s.spm_level >= 3 THEN 1 ELSE NULL END) AS spm_exceeded_count,-->
+<!--               COUNT(CASE WHEN s.aqi_id >= 3 THEN 1 ELSE NULL END)    AS aqi_exceeded_count-->
+<!--        FROM grid_province gp-->
+<!--                 LEFT JOIN statistics s-->
+<!--                           ON gp.province_id = s.province_id-->
+<!--        GROUP BY gp.province_id-->
+<!--        ORDER BY gp.province_id;-->
+<!--    </select>-->
 
-    <select id="getAqiCountInfo" resultType="com.neu.edu.vo.AqiCountVO">
-        WITH all_aqi_ids AS (
-            SELECT DISTINCT aqi_id
-            FROM statistics
-            UNION
-            SELECT aqi_id
-            FROM aqi
-        )
+<!--    <select id="getAqiCountInfo" resultType="com.neu.edu.vo.AqiCountVO">-->
+<!--        WITH all_aqi_ids AS (-->
+<!--            SELECT DISTINCT aqi_id-->
+<!--            FROM statistics-->
+<!--            UNION-->
+<!--            SELECT aqi_id-->
+<!--            FROM aqi-->
+<!--        )-->
 
-        SELECT aa.aqi_id,
-               aqi.aqi_explain,
-               COALESCE(COUNT(s.aqi_id), 0) AS count
-        FROM all_aqi_ids aa
-                 LEFT JOIN statistics s ON aa.aqi_id = s.aqi_id
-                 LEFT JOIN aqi ON aa.aqi_id = aqi.aqi_id
-        GROUP BY aa.aqi_id, aqi.aqi_explain
-        ORDER BY aa.aqi_id
-    </select>
+<!--        SELECT aa.aqi_id aqi_id,-->
+<!--               aqi.aqi_explain aqi_explain,-->
+<!--               COALESCE(COUNT(s.aqi_id), 0) AS count-->
+<!--        FROM all_aqi_ids aa-->
+<!--                 LEFT JOIN statistics s ON aa.aqi_id = s.aqi_id-->
+<!--                 LEFT JOIN aqi ON aa.aqi_id = aqi.aqi_id-->
+<!--        GROUP BY aa.aqi_id, aqi.aqi_explain-->
+<!--        ORDER BY aa.aqi_id-->
+<!--    </select>-->
 
-    <select id="getAqiMonthCountInfo" resultType="com.neu.edu.vo.AqiMonthCountVO">
-        WITH recent_months AS (
-            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL t.n MONTH), '%Y-%m') AS month
-            FROM (
-                     SELECT 0 AS n
-                     UNION ALL
-                     SELECT 1
-                     UNION ALL
-                     SELECT 2
-                     UNION ALL
-                     SELECT 3
-                     UNION ALL
-                     SELECT 4
-                     UNION ALL
-                     SELECT 5
-                     UNION ALL
-                     SELECT 6
-                     UNION ALL
-                     SELECT 7
-                     UNION ALL
-                     SELECT 8
-                     UNION ALL
-                     SELECT 9
-                     UNION ALL
-                     SELECT 10
-                     UNION ALL
-                     SELECT 11
-                 ) AS t
-        )
+<!--    <select id="getAqiMonthCountInfo" resultType="com.neu.edu.vo.AqiMonthCountVO">-->
+<!--        WITH recent_months AS (-->
+<!--            SELECT DATE_FORMAT(DATE_SUB(CURDATE(), INTERVAL t.n MONTH), '%Y-%m') AS month-->
+<!--            FROM (-->
+<!--                     SELECT 0 AS n-->
+<!--                     UNION ALL-->
+<!--                     SELECT 1-->
+<!--                     UNION ALL-->
+<!--                     SELECT 2-->
+<!--                     UNION ALL-->
+<!--                     SELECT 3-->
+<!--                     UNION ALL-->
+<!--                     SELECT 4-->
+<!--                     UNION ALL-->
+<!--                     SELECT 5-->
+<!--                     UNION ALL-->
+<!--                     SELECT 6-->
+<!--                     UNION ALL-->
+<!--                     SELECT 7-->
+<!--                     UNION ALL-->
+<!--                     SELECT 8-->
+<!--                     UNION ALL-->
+<!--                     SELECT 9-->
+<!--                     UNION ALL-->
+<!--                     SELECT 10-->
+<!--                     UNION ALL-->
+<!--                     SELECT 11-->
+<!--                 ) AS t-->
+<!--        )-->
 
-        SELECT rm.month             AS month,
-               COALESCE(s.count, 0) AS count
-        FROM recent_months rm
-                 LEFT JOIN (
-            SELECT DATE_FORMAT(STR_TO_DATE(confirm_date, '%Y-%m-%d'), '%Y-%m') AS month,
-                   COUNT(*)                                                    AS count
-            FROM statistics
-            WHERE aqi_id >= 3
-              AND STR_TO_DATE(confirm_date, '%Y-%m-%d') >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)
-            GROUP BY DATE_FORMAT(STR_TO_DATE(confirm_date, '%Y-%m-%d'), '%Y-%m')
-        ) s ON rm.month = s.month
-        ORDER BY rm.month DESC;
-    </select>
+<!--        SELECT rm.month             AS month,-->
+<!--               COALESCE(s.count, 0) AS count-->
+<!--        FROM recent_months rm-->
+<!--                 LEFT JOIN (-->
+<!--            SELECT DATE_FORMAT(STR_TO_DATE(confirm_date, '%Y-%m-%d'), '%Y-%m') AS month,-->
+<!--                   COUNT(*)                                                    AS count-->
+<!--            FROM statistics-->
+<!--            WHERE aqi_id >= 3-->
+<!--              AND STR_TO_DATE(confirm_date, '%Y-%m-%d') >= DATE_SUB(CURDATE(), INTERVAL 12 MONTH)-->
+<!--            GROUP BY DATE_FORMAT(STR_TO_DATE(confirm_date, '%Y-%m-%d'), '%Y-%m')-->
+<!--        ) s ON rm.month = s.month-->
+<!--        ORDER BY rm.month DESC;-->
+<!--    </select>-->
 
+<!--    <select id="getCoverageInfo" resultType="com.neu.edu.vo.CoverageVO">-->
+<!--        # 计算有网格员的省会城市相对于所有省会城市的占比和有网格员的大城市相对于所有大城市的占比-->
+<!--        SELECT ROUND((COUNT(DISTINCT CASE WHEN gc.city_level = 2 THEN gc.city_id END) /-->
+<!--                      (SELECT COUNT(*) FROM grid_city WHERE city_level = 2)) *-->
+<!--                     100)                                                            AS provincial_capital_city_coverage,-->
+<!--               ROUND((COUNT(DISTINCT CASE WHEN gc.city_level >= 1 THEN gc.city_id END) /-->
+<!--                      (SELECT COUNT(*) FROM grid_city WHERE city_level >= 1)) * 100) AS big_city_coverage-->
+<!--        FROM grid_city gc-->
+<!--                 LEFT JOIN-->
+<!--             grid_member gm ON gc.city_id = gm.city_id-->
+<!--        WHERE gm.gm_id IS NOT NULL;-->
+<!--    </select>-->
+
+<!--    <select id="getSummaryDataInfo" resultType="com.neu.edu.vo.SummaryDataVO">-->
+<!--        SELECT COUNT(*) total,-->
+<!--        COUNT(CASE WHEN s.aqi_id >= 1 AND s.aqi_id <= 2 THEN s.id END) good_count,-->
+<!--        COUNT(CASE WHEN s.aqi_id >= 3 AND s.aqi_id <= 6 THEN s.id END) exceeded_count-->
+<!--        FROM statistics s-->
+<!--    </select>-->
 
 </mapper>

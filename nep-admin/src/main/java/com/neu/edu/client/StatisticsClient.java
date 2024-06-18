@@ -3,9 +3,7 @@ package com.neu.edu.client;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.utils.Result;
 import com.neu.edu.dto.StatisticsDTO;
-import com.neu.edu.vo.AqiCountVO;
-import com.neu.edu.vo.AqiMonthCountVO;
-import com.neu.edu.vo.ProvinceAqiIndexVO;
+import com.neu.edu.vo.*;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -26,4 +24,10 @@ public interface StatisticsClient {
 
     @GetMapping("nep/statistics/get_aqi_month_count_info")
     Result<List<AqiMonthCountVO>> getAqiMonthCountInfo();
+
+    @GetMapping("nep/statistics/get_coverage_info")
+    Result<CoverageVO> getCoverageInfo();
+
+    @GetMapping("nep/statistics/get_summary_data_info")
+    Result<SummaryDataVO> getSummaryDataInfo();
 }

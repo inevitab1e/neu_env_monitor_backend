@@ -31,5 +31,6 @@ public class GridCityDTO implements Serializable {
 	@ApiModelProperty(value = "Remarks")
 	private String remarks;
 
-
+	@ApiModelProperty(value = "0 Normal City 1 Big City 2 Provincial Capital City")
+	private Integer cityLevel;
 }

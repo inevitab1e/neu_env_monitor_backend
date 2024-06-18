@@ -33,4 +33,8 @@ public class GridCityEntity {
      * Remarks
      */
 	private String remarks;
+    /**
+     * City Level
+     */
+     private Integer cityLevel;
 }

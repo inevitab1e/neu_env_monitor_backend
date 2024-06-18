@@ -90,13 +90,10 @@ public class SupervisorController {
         return result;
     }
 
-    @ApiOperation("获取反馈记录")
     @GetMapping("records")
+    @ApiOperation("获取反馈记录")
     public Result<PageData<SupervisorAqiFeedbackRecordVO>> pageRecords(@ApiIgnore @RequestParam Map<String, Object> params) {
         Result<PageData<SupervisorAqiFeedbackRecordVO>> pageDataResult = supervisorService.pageRecords(params);
-        if (CollectionUtils.isEmpty(pageDataResult.getData().getList())) {
-            return new Result<PageData<SupervisorAqiFeedbackRecordVO>>().error(403, "未找到相关记录");
-        }
         return pageDataResult;
     }
 

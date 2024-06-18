@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OtherDataVO {
+public class SummaryDataVO {
     private Integer total;
     private Integer goodCount;
     private Integer exceededCount;

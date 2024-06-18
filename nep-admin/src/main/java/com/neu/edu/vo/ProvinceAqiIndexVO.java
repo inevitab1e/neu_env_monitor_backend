@@ -14,5 +14,5 @@ public class ProvinceAqiIndexVO {
     private Integer so2ExceededCount;
     private Integer coExceededCount;
     private Integer spmExceededCount;
-    private Integer aqiExceedCount;
+    private Integer aqiExceededCount;
 }

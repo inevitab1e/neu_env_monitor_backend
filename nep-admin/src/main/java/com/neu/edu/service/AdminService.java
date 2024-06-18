@@ -8,9 +8,8 @@ import com.neu.edu.dto.AqiFeedbackDetailDTO;
 import com.neu.edu.dto.ConfirmedAqiFeedbackDTO;
 import com.neu.edu.dto.GridMemberDTO;
 import com.neu.edu.entity.AdminEntity;
-import com.neu.edu.vo.AqiCountVO;
-import com.neu.edu.vo.AqiMonthCountVO;
-import com.neu.edu.vo.ProvinceAqiIndexVO;
+import com.neu.edu.vo.*;
+
 
 import java.util.List;
 import java.util.Map;
@@ -34,4 +33,8 @@ public interface AdminService extends CrudService<AdminEntity, AdminDTO> {
     Result<List<AqiCountVO>> getAqiCountInfo();
 
     Result<List<AqiMonthCountVO>> getAqiMonthCountInfo();
+
+    Result<CoverageVO> getCoverageInfo();
+
+    Result<SummaryDataVO> getSummaryDataInfo();
 }

@@ -1,6 +1,5 @@
 package com.neu.edu.controller;
 
-import cn.hutool.db.Page;
 import com.neu.edu.common.annotation.LogOperation;
 import com.neu.edu.common.constant.Constant;
 import com.neu.edu.common.page.PageData;
@@ -15,9 +14,8 @@ import com.neu.edu.dto.AqiFeedbackDetailDTO;
 import com.neu.edu.dto.ConfirmedAqiFeedbackDTO;
 import com.neu.edu.dto.GridMemberDTO;
 import com.neu.edu.service.AdminService;
-import com.neu.edu.vo.AqiCountVO;
-import com.neu.edu.vo.AqiMonthCountVO;
-import com.neu.edu.vo.ProvinceAqiIndexVO;
+
+import com.neu.edu.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -94,28 +92,37 @@ public class AdminController {
     @GetMapping("get_province_aqi_index_exceeded_info")
     @ApiOperation("获取省份aqi指数超标信息")
     public Result<List<ProvinceAqiIndexVO>> getProvinceAqiIndexExceededInfo() {
-        Result<List<ProvinceAqiIndexVO>> data = adminsService.getProvinceAqiIndexExceededInfo();
-        return data;
+        Result<List<ProvinceAqiIndexVO>> result = adminsService.getProvinceAqiIndexExceededInfo();
+        return result;
     }
 
     @GetMapping("get_aqi_count_info")
     @ApiOperation("获取aqi指数统计信息")
     public Result<List<AqiCountVO>> getAqiCountInfo() {
-        Result<List<AqiCountVO>> data = adminsService.getAqiCountInfo();
-        return data;
+        Result<List<AqiCountVO>> result = adminsService.getAqiCountInfo();
+        return result;
     }
 
     @GetMapping("get_aqi_month_count_info")
     @ApiOperation("获取aqi指数月统计信息")
     public Result<List<AqiMonthCountVO>> getAqiMonthCountInfo() {
-        Result<List<AqiMonthCountVO>> data = adminsService.getAqiMonthCountInfo();
-        return data;
+        Result<List<AqiMonthCountVO>> result = adminsService.getAqiMonthCountInfo();
+        return result;
     }
 
-    //    @PostMapping
-//    public Result assign(@RequestBody AssignDTO dto){
-//
-//    }
+    @GetMapping("get_coverage_info")
+    @ApiOperation("获取覆盖率统计信息")
+    Result<CoverageVO> getCoverageInfo() {
+        Result<CoverageVO> result = adminsService.getCoverageInfo();
+        return result;
+    }
+
+    @GetMapping("get_summary_data_info")
+    @ApiOperation("获取汇总数据统计信息 总数 优良 污染")
+    Result<SummaryDataVO> getSummaryDataInfo() {
+        Result<SummaryDataVO> result = adminsService.getSummaryDataInfo();
+        return result;
+    }
 
     @GetMapping("{adminId}")
     @ApiOperation("信息")

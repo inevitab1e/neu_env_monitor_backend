@@ -1,6 +1,5 @@
 package com.neu.edu.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.neu.edu.client.*;
 import com.neu.edu.common.page.PageData;
@@ -12,12 +11,8 @@ import com.neu.edu.common.service.impl.CrudServiceImpl;
 import com.neu.edu.entity.AdminEntity;
 import com.neu.edu.service.AdminService;
 import cn.hutool.core.util.StrUtil;
-import com.neu.edu.vo.AqiCountVO;
-import com.neu.edu.vo.AqiMonthCountVO;
-import com.neu.edu.vo.ProvinceAqiIndexVO;
-import io.swagger.models.auth.In;
+import com.neu.edu.vo.*;
 import lombok.RequiredArgsConstructor;
-import org.checkerframework.checker.units.qual.C;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -148,6 +143,18 @@ public class AdminServiceImpl extends CrudServiceImpl<AdminDao, AdminEntity, Adm
     @Override
     public Result<List<AqiMonthCountVO>> getAqiMonthCountInfo() {
         Result<List<AqiMonthCountVO>> result = statisticsClient.getAqiMonthCountInfo();
+        return result;
+    }
+
+    @Override
+    public Result<CoverageVO> getCoverageInfo() {
+        Result<CoverageVO> result = statisticsClient.getCoverageInfo();
+        return result;
+    }
+
+    @Override
+    public Result<SummaryDataVO> getSummaryDataInfo() {
+        Result<SummaryDataVO> result = statisticsClient.getSummaryDataInfo();
         return result;
     }
 

@@ -44,10 +44,10 @@ public class AqiFeedbackController {
             @ApiImplicitParam(name = Constant.ORDER, value = "排序方式，可选值(asc、desc)", paramType = "query", dataType = "String")
     })
     public Result<PageData<AqiFeedbackDTO>> page(@ApiIgnore @RequestParam Map<String, Object> params) {
-        System.out.println(params);
         PageData<AqiFeedbackDTO> page = aqiFeedbackService.page(params);
+
         if (CollectionUtils.isEmpty(page.getList())) {
-            return new Result<PageData<AqiFeedbackDTO>>().error("未查询到反馈记录");
+            return new Result<PageData<AqiFeedbackDTO>>().error(403, "未查询到反馈记录");
         }
         return new Result<PageData<AqiFeedbackDTO>>().ok(page);
     }

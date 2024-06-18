@@ -8,9 +8,7 @@ import com.neu.edu.dto.StatisticsDTO;
 import com.neu.edu.entity.StatisticsEntity;
 import com.neu.edu.service.StatisticsService;
 import cn.hutool.core.util.StrUtil;
-import com.neu.edu.vo.AqiCountVO;
-import com.neu.edu.vo.AqiMonthCountVO;
-import com.neu.edu.vo.ProvinceAqiIndexVO;
+import com.neu.edu.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -74,5 +72,27 @@ public class StatisticsServiceImpl extends CrudServiceImpl<StatisticsDao, Statis
         }
 
         return new Result<List<AqiMonthCountVO>>().ok(resultList);
+    }
+
+    @Override
+    public Result<CoverageVO> getCoverageInfo() {
+        CoverageVO result = statisticsDao.getCoverageInfo();
+
+        if (result == null) {
+            return new Result<CoverageVO>().error("未查询到数据");
+        }
+
+        return new Result<CoverageVO>().ok(result);
+    }
+
+    @Override
+    public Result<SummaryDataVO> getSummaryDataInfo() {
+        SummaryDataVO result = statisticsDao.getSummaryDataInfo();
+
+        if (result == null) {
+            return new Result<SummaryDataVO>().error("未查询到数据");
+        }
+
+        return new Result<SummaryDataVO>().ok(result);
     }
 }

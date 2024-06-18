@@ -67,8 +67,8 @@ public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMe
     @Override
     public Result<PageData<AssignmentInfoDTO>> getAssignments(Map<String, Object> params) {
         Result<PageData<AqiFeedbackDTO>> baseResult = aqiFeedbackClient.page(params);
-        if (CollectionUtils.isEmpty(baseResult.getData().getList())) {
-            return new Result<PageData<AssignmentInfoDTO>>().error("未查到信息");
+        if (baseResult.getData() == null || CollectionUtils.isEmpty(baseResult.getData().getList())) {
+            return new Result<PageData<AssignmentInfoDTO>>().error(403,"未分配任务");
         }
 
         Integer total = baseResult.getData().getTotal();

@@ -108,30 +108,30 @@ public class StatisticsController {
         return new Result();
     }
 
-    @PutMapping
-    @ApiOperation("修改")
-    @LogOperation("修改")
-    @RequiresPermissions("demo:statistics:update")
-    public Result update(@RequestBody StatisticsDTO dto) {
-        //效验数据
-        ValidatorUtils.validateEntity(dto, UpdateGroup.class, DefaultGroup.class);
-
-        statisticsService.update(dto);
-
-        return new Result();
-    }
-
-    @DeleteMapping
-    @ApiOperation("删除")
-    @LogOperation("删除")
-    @RequiresPermissions("demo:statistics:delete")
-    public Result delete(@RequestBody Long[] ids) {
-        //效验数据
-        AssertUtils.isArrayEmpty(ids, "id");
-
-        statisticsService.delete(ids);
-
-        return new Result();
-    }
+//    @PutMapping
+//    @ApiOperation("修改")
+//    @LogOperation("修改")
+//    @RequiresPermissions("demo:statistics:update")
+//    public Result update(@RequestBody StatisticsDTO dto) {
+//        //效验数据
+//        ValidatorUtils.validateEntity(dto, UpdateGroup.class, DefaultGroup.class);
+//
+//        statisticsService.update(dto);
+//
+//        return new Result();
+//    }
+//
+//    @DeleteMapping
+//    @ApiOperation("删除")
+//    @LogOperation("删除")
+//    @RequiresPermissions("demo:statistics:delete")
+//    public Result delete(@RequestBody Long[] ids) {
+//        //效验数据
+//        AssertUtils.isArrayEmpty(ids, "id");
+//
+//        statisticsService.delete(ids);
+//
+//        return new Result();
+//    }
 
 }

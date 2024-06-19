@@ -62,7 +62,7 @@ public class AqiFeedbackController {
         return new Result<AqiFeedbackDTO>().ok(data);
     }
 
-    @PostMapping
+    @PostMapping("save")
     @ApiOperation("保存")
     @LogOperation("保存")
     @RequiresPermissions("demo:aqifeedback:save")

@@ -84,7 +84,7 @@ public class SupervisorServiceImpl extends CrudServiceImpl<SupervisorDao, Superv
         // 调用aqiFeedbackClient分页查询反馈列表
         Result<PageData<AqiFeedbackDTO>> aqiFeedbackResult = aqiFeedbackClient.page(params);
         if (aqiFeedbackResult.getData() == null || CollectionUtils.isEmpty(aqiFeedbackResult.getData().getList())) {
-            return new Result<PageData<SupervisorAqiFeedbackRecordVO>>().error(403, "未查到记录");
+            return new Result<PageData<SupervisorAqiFeedbackRecordVO>>().error(403, "No records were found");
         }
         // 获取分页数据
         List<AqiFeedbackDTO> aqiFeedbackDTOList = aqiFeedbackResult.getData().getList();

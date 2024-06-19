@@ -72,43 +72,43 @@ public class GridProvinceController {
         return new Result<List<GridProvinceDTO>>().ok(data);
     }
 
-    @PostMapping
-    @ApiOperation("保存")
-    @LogOperation("保存")
-    @RequiresPermissions("demo:gridprovince:save")
-    public Result save(@RequestBody GridProvinceDTO dto) {
-        //效验数据
-        ValidatorUtils.validateEntity(dto, AddGroup.class, DefaultGroup.class);
-
-        gridProvinceService.save(dto);
-
-        return new Result();
-    }
-
-    @PutMapping
-    @ApiOperation("修改")
-    @LogOperation("修改")
-    @RequiresPermissions("demo:gridprovince:update")
-    public Result update(@RequestBody GridProvinceDTO dto) {
-        //效验数据
-        ValidatorUtils.validateEntity(dto, UpdateGroup.class, DefaultGroup.class);
-
-        gridProvinceService.update(dto);
-
-        return new Result();
-    }
-
-    @DeleteMapping
-    @ApiOperation("删除")
-    @LogOperation("删除")
-    @RequiresPermissions("demo:gridprovince:delete")
-    public Result delete(@RequestBody Long[] ids) {
-        //效验数据
-        AssertUtils.isArrayEmpty(ids, "id");
-
-        gridProvinceService.delete(ids);
-
-        return new Result();
-    }
+//    @PostMapping
+//    @ApiOperation("保存")
+//    @LogOperation("保存")
+//    @RequiresPermissions("demo:gridprovince:save")
+//    public Result save(@RequestBody GridProvinceDTO dto) {
+//        //效验数据
+//        ValidatorUtils.validateEntity(dto, AddGroup.class, DefaultGroup.class);
+//
+//        gridProvinceService.save(dto);
+//
+//        return new Result();
+//    }
+//
+//    @PutMapping
+//    @ApiOperation("修改")
+//    @LogOperation("修改")
+//    @RequiresPermissions("demo:gridprovince:update")
+//    public Result update(@RequestBody GridProvinceDTO dto) {
+//        //效验数据
+//        ValidatorUtils.validateEntity(dto, UpdateGroup.class, DefaultGroup.class);
+//
+//        gridProvinceService.update(dto);
+//
+//        return new Result();
+//    }
+//
+//    @DeleteMapping
+//    @ApiOperation("删除")
+//    @LogOperation("删除")
+//    @RequiresPermissions("demo:gridprovince:delete")
+//    public Result delete(@RequestBody Long[] ids) {
+//        //效验数据
+//        AssertUtils.isArrayEmpty(ids, "id");
+//
+//        gridProvinceService.delete(ids);
+//
+//        return new Result();
+//    }
 
 }

@@ -3,10 +3,7 @@ package com.neu.edu.service;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.service.CrudService;
 import com.neu.edu.common.utils.Result;
-import com.neu.edu.dto.AdminDTO;
-import com.neu.edu.dto.AqiFeedbackDetailDTO;
-import com.neu.edu.dto.ConfirmedAqiFeedbackDTO;
-import com.neu.edu.dto.GridMemberDTO;
+import com.neu.edu.dto.*;
 import com.neu.edu.entity.AdminEntity;
 import com.neu.edu.vo.*;
 
@@ -37,4 +34,10 @@ public interface AdminService extends CrudService<AdminEntity, AdminDTO> {
     Result<CoverageVO> getCoverageInfo();
 
     Result<SummaryDataVO> getSummaryDataInfo();
+
+    Result<List<GridProvinceDTO>> getGridProvinceList();
+
+    Result<List<GridCityDTO>> getCityListByProvinceId(Integer provinceId);
+
+    Result assignGridMember(AqiFeedbackDTO dto);
 }

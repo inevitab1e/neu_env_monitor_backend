@@ -61,11 +61,12 @@ public class GridMemberController {
     }
 
     @PostMapping("login")
+    @ApiOperation("登录")
     public Result<GridMemberDTO> login(@RequestParam("gmCode") String gmCode, @RequestParam("password") String password) {
         List<GridMemberDTO> gridMemberDTOList = gridMemberService.selectByGmCode(gmCode);
 
         if (CollectionUtils.isEmpty(gridMemberDTOList)) {
-            return new Result<GridMemberDTO>().error(403, "账号不存在");
+            return new Result<GridMemberDTO>().error(403, "The account does not exist");
         }
 
         for (GridMemberDTO adminDTO : gridMemberDTOList) {
@@ -74,18 +75,18 @@ public class GridMemberController {
             }
         }
 
-        return new Result<GridMemberDTO>().error(403, "密码错误");
+        return new Result<GridMemberDTO>().error(403, "Wrong password");
     }
 
-    @GetMapping("/get_assignments")
+    @GetMapping("get_assignments")
+    @ApiOperation("根据gmId获取任务")
     public Result<PageData<AssignmentInfoDTO>> getAssignments(@RequestParam Map<String, Object> params) {
         Result<PageData<AssignmentInfoDTO>> data = gridMemberService.getAssignments(params);
         return data;
     }
 
     @PostMapping("confirm")
-    @ApiOperation("确认")
-    @LogOperation("确认")
+    @ApiOperation("确认提交监测数据")
     public Result confirm(@RequestBody AssignmentInfoDTO dto) {
         //效验数据
 //        ValidatorUtils.validateEntity(dto, AddGroup.class, DefaultGroup.class);
@@ -103,7 +104,7 @@ public class GridMemberController {
     public Result<List<GridMemberDTO>> getGridMemberByLocation(@RequestParam Map<String, Object> params) {
         List<GridMemberDTO> gridMemberDTOList = gridMemberService.getGridMemberByLocation(params);
         if (gridMemberDTOList == null) {
-            return new Result<List<GridMemberDTO>>().error(403, "未找到对应网格成员");
+            return new Result<List<GridMemberDTO>>().error(403, "There are no grid members in this area");
         }
         return new Result<List<GridMemberDTO>>().ok(gridMemberDTOList);
     }
@@ -122,29 +123,29 @@ public class GridMemberController {
         return new Result();
     }
 
-    @PutMapping
-    @ApiOperation("修改")
-    @LogOperation("修改")
-    @RequiresPermissions("demo:gridmember:update")
-    public Result update(@RequestBody GridMemberDTO dto) {
-        //效验数据
-        ValidatorUtils.validateEntity(dto, UpdateGroup.class, DefaultGroup.class);
-
-        gridMemberService.update(dto);
-
-        return new Result();
-    }
-
-    @DeleteMapping
-    @ApiOperation("删除")
-    @LogOperation("删除")
-    @RequiresPermissions("demo:gridmember:delete")
-    public Result delete(@RequestBody Long[] ids) {
-        //效验数据
-        AssertUtils.isArrayEmpty(ids, "id");
-
-        gridMemberService.delete(ids);
-
-        return new Result();
-    }
+//    @PutMapping
+//    @ApiOperation("修改")
+//    @LogOperation("修改")
+//    @RequiresPermissions("demo:gridmember:update")
+//    public Result update(@RequestBody GridMemberDTO dto) {
+//        //效验数据
+//        ValidatorUtils.validateEntity(dto, UpdateGroup.class, DefaultGroup.class);
+//
+//        gridMemberService.update(dto);
+//
+//        return new Result();
+//    }
+//
+//    @DeleteMapping
+//    @ApiOperation("删除")
+//    @LogOperation("删除")
+//    @RequiresPermissions("demo:gridmember:delete")
+//    public Result delete(@RequestBody Long[] ids) {
+//        //效验数据
+//        AssertUtils.isArrayEmpty(ids, "id");
+//
+//        gridMemberService.delete(ids);
+//
+//        return new Result();
+//    }
 }

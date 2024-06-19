@@ -17,6 +17,7 @@ import com.neu.edu.entity.GridMemberEntity;
 import com.neu.edu.service.GridMemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -68,7 +69,7 @@ public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMe
     public Result<PageData<AssignmentInfoDTO>> getAssignments(Map<String, Object> params) {
         Result<PageData<AqiFeedbackDTO>> baseResult = aqiFeedbackClient.page(params);
         if (baseResult.getData() == null || CollectionUtils.isEmpty(baseResult.getData().getList())) {
-            return new Result<PageData<AssignmentInfoDTO>>().error(403,"未分配任务");
+            return new Result<PageData<AssignmentInfoDTO>>().error(403,"No task assigned");
         }
 
         Integer total = baseResult.getData().getTotal();
@@ -97,6 +98,7 @@ public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMe
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void confirm(AssignmentInfoDTO dto) {
         AqiFeedbackDTO aqiFeedbackDTO = BeanUtil.copyProperties(dto, AqiFeedbackDTO.class);
         aqiFeedbackClient.update(aqiFeedbackDTO);

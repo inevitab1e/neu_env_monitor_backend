@@ -158,6 +158,24 @@ public class AdminServiceImpl extends CrudServiceImpl<AdminDao, AdminEntity, Adm
         return result;
     }
 
+    @Override
+    public Result<List<GridProvinceDTO>> getGridProvinceList() {
+        Result<List<GridProvinceDTO>> result = locationClient.getProvinceList();
+        return result;
+    }
+
+    @Override
+    public Result<List<GridCityDTO>> getCityListByProvinceId(Integer provinceId) {
+        Result<List<GridCityDTO>> result = locationClient.getCityListByProvinceId(provinceId);
+        return result;
+    }
+
+    @Override
+    public Result assignGridMember(AqiFeedbackDTO dto) {
+        Result result = aqiFeedbackClient.update(dto);
+        return result;
+    }
+
 //    @Override
 //    public AdminDTO get(Long id) {
 //        return super.get(id);

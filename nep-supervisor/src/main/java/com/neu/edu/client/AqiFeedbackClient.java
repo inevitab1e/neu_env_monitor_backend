@@ -22,6 +22,6 @@ public interface AqiFeedbackClient {
     @GetMapping("nep/aqifeedback/page")
     Result<PageData<AqiFeedbackDTO>> page(@RequestParam Map<String, Object> params);
 
-    @PostMapping
+    @PostMapping("nep/aqifeedback/save")
     Result save(@RequestBody AqiFeedbackDTO dto);
 }

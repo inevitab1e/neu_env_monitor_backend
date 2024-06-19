@@ -70,14 +70,14 @@ public class SupervisorController {
         SupervisorDTO data = supervisorService.selectByTelId(telId);
 
         if (data == null) {
-            return new Result<SupervisorDTO>().error(403, "账号不存在");
+            return new Result<SupervisorDTO>().error(403, "The account does not exist");
         }
 
         if (data.getPassword().equals(password)) {
             return new Result<SupervisorDTO>().ok(data);
         }
 
-        return new Result<SupervisorDTO>().error(403, "密码错误");
+        return new Result<SupervisorDTO>().error(403, "Wrong password");
     }
 
     @GetMapping("aqi_list")
@@ -104,10 +104,10 @@ public class SupervisorController {
     }
 
 
-    @PostMapping("/sign_in")
+    @PostMapping("sign_up")
     @ApiOperation("注册")
     @LogOperation("注册")
-    public Result signIn(@RequestBody SupervisorDTO dto) {
+    public Result signUp(@RequestBody SupervisorDTO dto) {
         //效验数据
         ValidatorUtils.validateEntity(dto, AddGroup.class, DefaultGroup.class);
 
@@ -116,30 +116,30 @@ public class SupervisorController {
         return new Result();
     }
 
-    @PutMapping
-    @ApiOperation("修改")
-    @LogOperation("修改")
-    @RequiresPermissions("demo:supervisor:update")
-    public Result update(@RequestBody SupervisorDTO dto) {
-        //效验数据
-        ValidatorUtils.validateEntity(dto, UpdateGroup.class, DefaultGroup.class);
-
-        supervisorService.update(dto);
-
-        return new Result();
-    }
-
-    @DeleteMapping
-    @ApiOperation("删除")
-    @LogOperation("删除")
-    @RequiresPermissions("demo:supervisor:delete")
-    public Result delete(@RequestBody Long[] ids) {
-        //效验数据
-        AssertUtils.isArrayEmpty(ids, "id");
-
-        supervisorService.delete(ids);
-
-        return new Result();
-    }
+//    @PutMapping
+//    @ApiOperation("修改")
+//    @LogOperation("修改")
+//    @RequiresPermissions("demo:supervisor:update")
+//    public Result update(@RequestBody SupervisorDTO dto) {
+//        //效验数据
+//        ValidatorUtils.validateEntity(dto, UpdateGroup.class, DefaultGroup.class);
+//
+//        supervisorService.update(dto);
+//
+//        return new Result();
+//    }
+//
+//    @DeleteMapping
+//    @ApiOperation("删除")
+//    @LogOperation("删除")
+//    @RequiresPermissions("demo:supervisor:delete")
+//    public Result delete(@RequestBody Long[] ids) {
+//        //效验数据
+//        AssertUtils.isArrayEmpty(ids, "id");
+//
+//        supervisorService.delete(ids);
+//
+//        return new Result();
+//    }
 
 }

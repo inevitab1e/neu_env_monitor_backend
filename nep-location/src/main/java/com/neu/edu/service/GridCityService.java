@@ -1,8 +1,11 @@
 package com.neu.edu.service;
 
 import com.neu.edu.common.service.CrudService;
+import com.neu.edu.common.utils.Result;
 import com.neu.edu.dto.GridCityDTO;
 import com.neu.edu.entity.GridCityEntity;
+
+import java.util.List;
 
 /**
  * 
@@ -12,4 +15,5 @@ import com.neu.edu.entity.GridCityEntity;
  */
 public interface GridCityService extends CrudService<GridCityEntity, GridCityDTO> {
 
+    Result<List<GridCityDTO>> getCityListByProvinceId(Integer provinceId);
 }

@@ -63,58 +63,51 @@ public class GridCityController {
         return new Result<GridCityDTO>().ok(data);
     }
 
-//    // 路径要改
-//    @GetMapping("/get_province/{provinceId}")
-//    @ApiOperation("根据省查找其含有的市")
-//    public Result<List<GridCityDTO>> getCityByProvinceId(@PathVariable("provinceId") String provinceId) {
-//        HashMap<String, Object> params = new HashMap<>();
-//        params.put("provinceId", provinceId);
-//        List<GridCityDTO> data = gridCityService.list(params);
+    @GetMapping("get_city_list_by_province_id/{provinceId}")
+    @ApiOperation("根据省id获取市列表")
+    public Result<List<GridCityDTO>> getCityListByProvinceId(@PathVariable("provinceId") Integer provinceId) {
+        Result<List<GridCityDTO>> result = gridCityService.getCityListByProvinceId(provinceId);
+        return result;
+    }
+
+
+//    @PostMapping
+//    @ApiOperation("保存")
+//    @LogOperation("保存")
+//    @RequiresPermissions("demo:gridcity:save")
+//    public Result save(@RequestBody GridCityDTO dto) {
+//        //效验数据
+//        ValidatorUtils.validateEntity(dto, AddGroup.class, DefaultGroup.class);
 //
-//        if (CollectionUtils.isEmpty(data)) {
-//            return new Result<List<GridCityDTO>>().error("没有找到该省下的市");
-//        }
+//        gridCityService.save(dto);
 //
-//        return new Result<List<GridCityDTO>>().ok(data);
+//        return new Result();
 //    }
-
-    @PostMapping
-    @ApiOperation("保存")
-    @LogOperation("保存")
-    @RequiresPermissions("demo:gridcity:save")
-    public Result save(@RequestBody GridCityDTO dto) {
-        //效验数据
-        ValidatorUtils.validateEntity(dto, AddGroup.class, DefaultGroup.class);
-
-        gridCityService.save(dto);
-
-        return new Result();
-    }
-
-    @PutMapping
-    @ApiOperation("修改")
-    @LogOperation("修改")
-    @RequiresPermissions("demo:gridcity:update")
-    public Result update(@RequestBody GridCityDTO dto) {
-        //效验数据
-        ValidatorUtils.validateEntity(dto, UpdateGroup.class, DefaultGroup.class);
-
-        gridCityService.update(dto);
-
-        return new Result();
-    }
-
-    @DeleteMapping
-    @ApiOperation("删除")
-    @LogOperation("删除")
-    @RequiresPermissions("demo:gridcity:delete")
-    public Result delete(@RequestBody Long[] ids) {
-        //效验数据
-        AssertUtils.isArrayEmpty(ids, "id");
-
-        gridCityService.delete(ids);
-
-        return new Result();
-    }
+//
+//    @PutMapping
+//    @ApiOperation("修改")
+//    @LogOperation("修改")
+//    @RequiresPermissions("demo:gridcity:update")
+//    public Result update(@RequestBody GridCityDTO dto) {
+//        //效验数据
+//        ValidatorUtils.validateEntity(dto, UpdateGroup.class, DefaultGroup.class);
+//
+//        gridCityService.update(dto);
+//
+//        return new Result();
+//    }
+//
+//    @DeleteMapping
+//    @ApiOperation("删除")
+//    @LogOperation("删除")
+//    @RequiresPermissions("demo:gridcity:delete")
+//    public Result delete(@RequestBody Long[] ids) {
+//        //效验数据
+//        AssertUtils.isArrayEmpty(ids, "id");
+//
+//        gridCityService.delete(ids);
+//
+//        return new Result();
+//    }
 
 }

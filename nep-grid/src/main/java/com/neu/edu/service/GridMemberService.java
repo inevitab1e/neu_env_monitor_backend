@@ -3,8 +3,8 @@ package com.neu.edu.service;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.service.CrudService;
 import com.neu.edu.common.utils.Result;
-import com.neu.edu.dto.AssignmentInfoDTO;
-import com.neu.edu.dto.GridMemberDTO;
+import com.neu.edu.client.dto.AssignmentInfoDTO;
+import com.neu.edu.client.dto.GridMemberDTO;
 import com.neu.edu.entity.GridMemberEntity;
 
 import java.util.List;

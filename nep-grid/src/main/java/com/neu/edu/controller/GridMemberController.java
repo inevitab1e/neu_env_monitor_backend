@@ -4,13 +4,11 @@ import com.neu.edu.common.annotation.LogOperation;
 import com.neu.edu.common.constant.Constant;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.utils.Result;
-import com.neu.edu.common.validator.AssertUtils;
 import com.neu.edu.common.validator.ValidatorUtils;
 import com.neu.edu.common.validator.group.AddGroup;
 import com.neu.edu.common.validator.group.DefaultGroup;
-import com.neu.edu.common.validator.group.UpdateGroup;
-import com.neu.edu.dto.AssignmentInfoDTO;
-import com.neu.edu.dto.GridMemberDTO;
+import com.neu.edu.client.dto.AssignmentInfoDTO;
+import com.neu.edu.client.dto.GridMemberDTO;
 import com.neu.edu.service.GridMemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -33,6 +31,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("nep/grid")
 @Api(tags = "")
+@CrossOrigin("*")
 public class GridMemberController {
     @Autowired
     private GridMemberService gridMemberService;

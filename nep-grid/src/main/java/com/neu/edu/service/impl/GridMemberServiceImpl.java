@@ -3,16 +3,17 @@ package com.neu.edu.service.impl;
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.neu.edu.client.AqiFeedbackClient;
-import com.neu.edu.client.LocationClient;
-import com.neu.edu.client.StatisticsClient;
-import com.neu.edu.client.SupervisorClient;
+import com.neu.edu.client.client.AqiFeedbackClient;
+import com.neu.edu.client.client.LocationClient;
+import com.neu.edu.client.client.StatisticsClient;
+import com.neu.edu.client.client.SupervisorClient;
+import com.neu.edu.client.dto.*;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.service.impl.CrudServiceImpl;
 import com.neu.edu.common.utils.ConvertUtils;
 import com.neu.edu.common.utils.Result;
+import com.neu.edu.common.utils.UserContext;
 import com.neu.edu.dao.GridMemberDao;
-import com.neu.edu.dto.*;
 import com.neu.edu.entity.GridMemberEntity;
 import com.neu.edu.service.GridMemberService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,7 @@ import java.util.*;
  */
 @Service
 @RequiredArgsConstructor
-public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMemberEntity, GridMemberDTO> implements GridMemberService {
+public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMemberEntity, com.neu.edu.client.dto.GridMemberDTO> implements GridMemberService {
 
     private final AqiFeedbackClient aqiFeedbackClient;
     private final LocationClient locationClient;
@@ -57,19 +58,20 @@ public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMe
 
 
     @Override
-    public List<GridMemberDTO> selectByGmCode(String gmCode) {
+    public List<com.neu.edu.client.dto.GridMemberDTO> selectByGmCode(String gmCode) {
         Map<String, Object> params = new HashMap<>();
         params.put("gmCode", gmCode);
         QueryWrapper<GridMemberEntity> wrapper = getWrapper(params);
         List<GridMemberEntity> gridMemberEntities = baseDao.selectList(wrapper);
-        return ConvertUtils.sourceToTarget(gridMemberEntities, GridMemberDTO.class);
+        return ConvertUtils.sourceToTarget(gridMemberEntities, com.neu.edu.client.dto.GridMemberDTO.class);
     }
 
     @Override
     public Result<PageData<AssignmentInfoDTO>> getAssignments(Map<String, Object> params) {
+//        params.put("gmId", UserContext.getUser());
         Result<PageData<AqiFeedbackDTO>> baseResult = aqiFeedbackClient.page(params);
         if (baseResult.getData() == null || CollectionUtils.isEmpty(baseResult.getData().getList())) {
-            return new Result<PageData<AssignmentInfoDTO>>().error(403,"No task assigned");
+            return new Result<PageData<AssignmentInfoDTO>>().error(403, "No task assigned");
         }
 
         Integer total = baseResult.getData().getTotal();
@@ -109,7 +111,7 @@ public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMe
     }
 
     @Override
-    public List<GridMemberDTO> getGridMemberByLocation(Map<String, Object> params) {
+    public List<com.neu.edu.client.dto.GridMemberDTO> getGridMemberByLocation(Map<String, Object> params) {
         String provinceId = (String) params.get("provinceId");
         String cityId = (String) params.get("cityId");
 
@@ -123,7 +125,7 @@ public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMe
             return null;
         }
 
-        List<GridMemberDTO> gridMemberDTOList = ConvertUtils.sourceToTarget(gridMemberEntities, GridMemberDTO.class);
+        List<com.neu.edu.client.dto.GridMemberDTO> gridMemberDTOList = ConvertUtils.sourceToTarget(gridMemberEntities, GridMemberDTO.class);
 
         return gridMemberDTOList;
 

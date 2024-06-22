@@ -19,6 +19,7 @@ import java.util.List;
 @RestController
 @RequestMapping("nep/aqi")
 @Api(tags = "")
+@CrossOrigin("*")
 public class AqiController {
     @Autowired
     private AqiService aqiService;

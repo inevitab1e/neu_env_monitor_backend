@@ -1,23 +1,17 @@
 package com.neu.edu.controller;
 
-import com.neu.edu.common.annotation.LogOperation;
+import com.neu.edu.client.dto.*;
+import com.neu.edu.client.vo.*;
+import com.neu.edu.dto.*;
 import com.neu.edu.common.constant.Constant;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.utils.Result;
-import com.neu.edu.dto.*;
-import com.neu.edu.common.validator.AssertUtils;
-import com.neu.edu.common.validator.ValidatorUtils;
-import com.neu.edu.common.validator.group.AddGroup;
-import com.neu.edu.common.validator.group.DefaultGroup;
-import com.neu.edu.common.validator.group.UpdateGroup;
 import com.neu.edu.service.AdminService;
 
-import com.neu.edu.vo.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +27,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("nep/admin")
 @Api(tags = "")
+@CrossOrigin("*")
 public class AdminController {
     @Autowired
     private AdminService adminsService;

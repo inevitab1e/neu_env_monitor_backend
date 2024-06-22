@@ -18,12 +18,9 @@ import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.*;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,6 +32,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("nep/gridcity")
 @Api(tags = "")
+@CrossOrigin("*")
 public class GridCityController {
     @Autowired
     private GridCityService gridCityService;

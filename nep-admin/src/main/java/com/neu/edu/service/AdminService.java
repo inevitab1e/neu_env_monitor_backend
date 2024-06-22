@@ -1,11 +1,12 @@
 package com.neu.edu.service;
 
+import com.neu.edu.client.dto.*;
+import com.neu.edu.client.vo.*;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.service.CrudService;
 import com.neu.edu.common.utils.Result;
 import com.neu.edu.dto.*;
 import com.neu.edu.entity.AdminEntity;
-import com.neu.edu.vo.*;
 
 
 import java.util.List;

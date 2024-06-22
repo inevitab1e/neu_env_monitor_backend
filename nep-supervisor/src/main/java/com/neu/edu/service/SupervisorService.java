@@ -3,11 +3,11 @@ package com.neu.edu.service;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.service.CrudService;
 import com.neu.edu.common.utils.Result;
-import com.neu.edu.dto.AqiDTO;
-import com.neu.edu.dto.AqiFeedbackDTO;
-import com.neu.edu.dto.SupervisorDTO;
+import com.neu.edu.client.dto.AqiDTO;
+import com.neu.edu.client.dto.AqiFeedbackDTO;
+import com.neu.edu.client.dto.SupervisorDTO;
 import com.neu.edu.entity.SupervisorEntity;
-import com.neu.edu.vo.SupervisorAqiFeedbackRecordVO;
+import com.neu.edu.client.vo.SupervisorAqiFeedbackRecordVO;
 
 import java.util.List;
 import java.util.Map;

@@ -31,6 +31,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("nep/aqifeedback")
 @Api(tags = "")
+@CrossOrigin("*")
 public class AqiFeedbackController {
     @Autowired
     private AqiFeedbackService aqiFeedbackService;

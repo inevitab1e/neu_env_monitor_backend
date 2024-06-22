@@ -1,20 +1,17 @@
 package com.neu.edu.controller;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.neu.edu.common.annotation.LogOperation;
 import com.neu.edu.common.constant.Constant;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.utils.Result;
-import com.neu.edu.common.validator.AssertUtils;
 import com.neu.edu.common.validator.ValidatorUtils;
 import com.neu.edu.common.validator.group.AddGroup;
 import com.neu.edu.common.validator.group.DefaultGroup;
-import com.neu.edu.common.validator.group.UpdateGroup;
-import com.neu.edu.dto.AqiDTO;
-import com.neu.edu.dto.AqiFeedbackDTO;
-import com.neu.edu.dto.SupervisorDTO;
+import com.neu.edu.client.dto.AqiDTO;
+import com.neu.edu.client.dto.AqiFeedbackDTO;
+import com.neu.edu.client.dto.SupervisorDTO;
 import com.neu.edu.service.SupervisorService;
-import com.neu.edu.vo.SupervisorAqiFeedbackRecordVO;
+import com.neu.edu.client.vo.SupervisorAqiFeedbackRecordVO;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -36,6 +33,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("nep/supervisor")
 @Api(tags = "")
+@CrossOrigin("*")
 public class SupervisorController {
     @Autowired
     private SupervisorService supervisorService;

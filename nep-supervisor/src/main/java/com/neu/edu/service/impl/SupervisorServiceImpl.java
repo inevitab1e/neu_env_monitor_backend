@@ -2,18 +2,19 @@ package com.neu.edu.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.neu.edu.client.AqiClient;
-import com.neu.edu.client.AqiFeedbackClient;
-import com.neu.edu.client.LocationClient;
+import com.neu.edu.client.client.AqiClient;
+import com.neu.edu.client.client.AqiFeedbackClient;
+import com.neu.edu.client.client.LocationClient;
+import com.neu.edu.client.dto.*;
+import com.neu.edu.client.dto.SupervisorDTO;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.service.impl.CrudServiceImpl;
 import com.neu.edu.common.utils.ConvertUtils;
 import com.neu.edu.common.utils.Result;
 import com.neu.edu.dao.SupervisorDao;
-import com.neu.edu.dto.*;
 import com.neu.edu.entity.SupervisorEntity;
 import com.neu.edu.service.SupervisorService;
-import com.neu.edu.vo.SupervisorAqiFeedbackRecordVO;
+import com.neu.edu.client.vo.SupervisorAqiFeedbackRecordVO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
@@ -29,7 +30,7 @@ import java.util.Map;
  */
 @Service
 @RequiredArgsConstructor
-public class SupervisorServiceImpl extends CrudServiceImpl<SupervisorDao, SupervisorEntity, SupervisorDTO> implements SupervisorService {
+public class SupervisorServiceImpl extends CrudServiceImpl<SupervisorDao, SupervisorEntity, com.neu.edu.client.dto.SupervisorDTO> implements SupervisorService {
 
     private final AqiClient aqiClient;
     private final AqiFeedbackClient aqiFeedbackClient;
@@ -58,7 +59,7 @@ public class SupervisorServiceImpl extends CrudServiceImpl<SupervisorDao, Superv
      * @version: 1.0
      */
     @Override
-    public SupervisorDTO selectByTelId(String telId) {
+    public com.neu.edu.client.dto.SupervisorDTO selectByTelId(String telId) {
         Map<String, Object> params = new HashMap<>();
         params.put("telId", telId);
         QueryWrapper<SupervisorEntity> wrapper = getWrapper(params);

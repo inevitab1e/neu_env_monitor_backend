@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: statistics-service
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+      config:
+        file-extension: yaml
+        shared-configs:
+          - data-id: nep-shared-jdbc.yaml

@@ -32,6 +32,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("nep/statistics")
 @Api(tags = "")
+@CrossOrigin("*")
 public class StatisticsController {
     @Autowired
     private StatisticsService statisticsService;

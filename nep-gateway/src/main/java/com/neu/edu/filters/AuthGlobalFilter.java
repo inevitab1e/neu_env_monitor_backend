@@ -15,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -32,7 +33,7 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         }
         // 2. 获取token
         String token = null;
-        List<String> headers = request.getHeaders().get("authorization");
+        List<String> headers = request.getHeaders().get("user-info");
         if (!CollectionUtils.isEmpty(headers)) {
             token = headers.get(0);
         }
@@ -56,7 +57,15 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
     }
 
     private boolean isExcluded(String toString) {
-        return true;
+        ArrayList<String> paths = new ArrayList<>();
+        paths.add("/nep/admin/login");
+        paths.add("/nep/supervisor/login");
+        paths.add("/nep/supervisor/sign_up");
+        paths.add("/nep/grid/login");
+        if (paths.contains(toString)) {
+            return true;
+        }
+        return false;
     }
 
     @Override

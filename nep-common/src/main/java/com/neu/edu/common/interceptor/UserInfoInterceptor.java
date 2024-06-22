@@ -25,7 +25,8 @@ public class UserInfoInterceptor implements HandlerInterceptor {
         String userInfo = request.getHeader("user-info");
         // 2. 判断是否获取了用户
         if (StrUtil.isNotBlank(userInfo)) {
-            UserContext.setUser(Integer.parseInt(userInfo));
+            Integer userId = JwtUtils.parseToken(userInfo).getClaim("userId").asInt();
+            UserContext.setUser(userId);
         }
         // 3. 放行
         return true;

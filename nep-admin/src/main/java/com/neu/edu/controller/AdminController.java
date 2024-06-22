@@ -2,12 +2,14 @@ package com.neu.edu.controller;
 
 import com.neu.edu.client.dto.*;
 import com.neu.edu.client.vo.*;
+import com.neu.edu.common.utils.JwtUtils;
 import com.neu.edu.dto.*;
 import com.neu.edu.common.constant.Constant;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.utils.Result;
 import com.neu.edu.service.AdminService;
 
+import feign.Headers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -43,6 +45,7 @@ public class AdminController {
 
         for (AdminDTO adminDTO : adminDTOList) {
             if (adminDTO.getPassword().equals(password)) {
+                adminDTO.setToken(JwtUtils.createToken(adminDTO.getAdminId()));
                 return new Result<AdminDTO>().ok(adminDTO);
             }
         }
@@ -58,7 +61,7 @@ public class AdminController {
             @ApiImplicitParam(name = Constant.ORDER_FIELD, value = "排序字段", paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = Constant.ORDER, value = "排序方式，可选值(asc、desc)", paramType = "query", dataType = "String")
     })
-    public Result<PageData<AqiFeedbackDetailDTO>> getAqiFeedbackDetailPage(@RequestParam Map<String, Object> params) {
+    public Result<PageData<AqiFeedbackDetailDTO>> getAqiFeedbackDetailPage(@RequestHeader("user-info") @RequestParam Map<String, Object> params) {
         Result<PageData<AqiFeedbackDetailDTO>> result = adminsService.getAqiFeedbackDetailPage(params);
         return result;
     }

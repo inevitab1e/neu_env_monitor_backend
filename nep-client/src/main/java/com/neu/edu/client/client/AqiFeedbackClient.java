@@ -11,7 +11,7 @@ import java.util.Map;
 @FeignClient(value = "aqifeedback-service")
 public interface AqiFeedbackClient {
     @GetMapping("nep/aqifeedback/page")
-    Result<PageData<AqiFeedbackDTO>> page(@RequestParam Map<String, Object> params);
+    Result<PageData<AqiFeedbackDTO>> page(@RequestHeader("user-info") @RequestParam Map<String, Object> params);
 
     @PutMapping("nep/aqifeedback/update")
     Result update(@RequestBody AqiFeedbackDTO dto);

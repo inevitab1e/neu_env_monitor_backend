@@ -48,7 +48,7 @@ public class AqiFeedbackController {
         PageData<AqiFeedbackDTO> page = aqiFeedbackService.page(params);
 
         if (CollectionUtils.isEmpty(page.getList())) {
-            return new Result<PageData<AqiFeedbackDTO>>().error(403, "未查询到反馈记录");
+            return new Result<PageData<AqiFeedbackDTO>>().error(204, "No feedback records");
         }
         return new Result<PageData<AqiFeedbackDTO>>().ok(page);
     }

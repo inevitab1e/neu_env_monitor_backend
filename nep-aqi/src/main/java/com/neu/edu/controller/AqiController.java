@@ -29,7 +29,7 @@ public class AqiController {
     public Result<List<AqiDTO>> getAqiList() {
         List<AqiDTO> data = aqiService.getAqiList();
         if (CollectionUtils.isEmpty(data)) {
-            return new Result<List<AqiDTO>>().error("未查询到数据");
+            return new Result<List<AqiDTO>>().error(204,"No data found.");
         }
         return new Result<List<AqiDTO>>().ok(data);
     }

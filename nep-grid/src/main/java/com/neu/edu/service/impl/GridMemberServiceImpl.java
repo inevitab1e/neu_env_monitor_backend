@@ -71,7 +71,7 @@ public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMe
 //        params.put("gmId", UserContext.getUser());
         Result<PageData<AqiFeedbackDTO>> baseResult = aqiFeedbackClient.page(params);
         if (baseResult.getData() == null || CollectionUtils.isEmpty(baseResult.getData().getList())) {
-            return new Result<PageData<AssignmentInfoDTO>>().error(403, "No task assigned");
+            return new Result<PageData<AssignmentInfoDTO>>().error(204, "No task assigned");
         }
 
         Integer total = baseResult.getData().getTotal();

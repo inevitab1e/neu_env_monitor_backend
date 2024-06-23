@@ -64,7 +64,7 @@ public class AdminServiceImpl extends CrudServiceImpl<AdminDao, AdminEntity, Adm
     public Result<PageData<AqiFeedbackDetailDTO>> getAqiFeedbackDetailPage(Map<String, Object> params) {
         Result<PageData<AqiFeedbackDTO>> basePage = aqiFeedbackClient.page(params);
         if (CollectionUtils.isEmpty(basePage.getData().getList())) {
-            return new Result<PageData<AqiFeedbackDetailDTO>>().error("未查询到数据");
+            return new Result<PageData<AqiFeedbackDetailDTO>>().error(204,"No data found.");
         }
 
         int total = basePage.getData().getTotal();

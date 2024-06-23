@@ -65,7 +65,7 @@ public class GridMemberController {
         List<GridMemberDTO> gridMemberDTOList = gridMemberService.selectByGmCode(gmCode);
 
         if (CollectionUtils.isEmpty(gridMemberDTOList)) {
-            return new Result<GridMemberDTO>().error(403, "The account does not exist");
+            return new Result<GridMemberDTO>().error(401, "The account does not exist.");
         }
 
         for (GridMemberDTO adminDTO : gridMemberDTOList) {
@@ -74,7 +74,7 @@ public class GridMemberController {
             }
         }
 
-        return new Result<GridMemberDTO>().error(403, "Wrong password");
+        return new Result<GridMemberDTO>().error(401, "Wrong password.");
     }
 
     @GetMapping("get_assignments")
@@ -103,7 +103,7 @@ public class GridMemberController {
     public Result<List<GridMemberDTO>> getGridMemberByLocation(@RequestParam Map<String, Object> params) {
         List<GridMemberDTO> gridMemberDTOList = gridMemberService.getGridMemberByLocation(params);
         if (gridMemberDTOList == null) {
-            return new Result<List<GridMemberDTO>>().error(403, "There are no grid members in this area");
+            return new Result<List<GridMemberDTO>>().error(204, "There are no grid members in this area");
         }
         return new Result<List<GridMemberDTO>>().ok(gridMemberDTOList);
     }

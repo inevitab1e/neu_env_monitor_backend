@@ -40,7 +40,7 @@ public class AdminController {
         List<AdminDTO> adminDTOList = adminsService.selectByAdminCode(adminCode);
 
         if (CollectionUtils.isEmpty(adminDTOList)) {
-            return new Result<AdminDTO>().error(403, "The account does not exist");
+            return new Result<AdminDTO>().error(401, "The account does not exist.");
         }
 
         for (AdminDTO adminDTO : adminDTOList) {
@@ -50,7 +50,7 @@ public class AdminController {
             }
         }
 
-        return new Result<AdminDTO>().error(403, "Wrong password");
+        return new Result<AdminDTO>().error(401, "Wrong password.");
     }
 
     @GetMapping("page_aqifeedback_detail")

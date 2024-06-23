@@ -46,7 +46,7 @@ public class StatisticsServiceImpl extends CrudServiceImpl<StatisticsDao, Statis
     public Result<List<ProvinceAqiIndexVO>> getProvinceAqiIndexExceededInfo() {
         List<ProvinceAqiIndexVO> resultList = statisticsDao.getProvinceAqiIndexExceededInfo();
         if (CollectionUtils.isEmpty(resultList)) {
-            return new Result<List<ProvinceAqiIndexVO>>().error("未查询到数据");
+            return new Result<List<ProvinceAqiIndexVO>>().error(204,"No data.");
         }
 
         return new Result<List<ProvinceAqiIndexVO>>().ok(resultList);
@@ -57,7 +57,7 @@ public class StatisticsServiceImpl extends CrudServiceImpl<StatisticsDao, Statis
         List<AqiCountVO> resultList = statisticsDao.getAqiCountInfo();
 
         if (CollectionUtils.isEmpty(resultList)) {
-            return new Result<List<AqiCountVO>>().error("未查询到数据");
+            return new Result<List<AqiCountVO>>().error(204,"No data.");
         }
 
         return new Result<List<AqiCountVO>>().ok(resultList);
@@ -68,7 +68,7 @@ public class StatisticsServiceImpl extends CrudServiceImpl<StatisticsDao, Statis
         List<AqiMonthCountVO> resultList = statisticsDao.getAqiMonthCountInfo();
 
         if (CollectionUtils.isEmpty(resultList)) {
-            return new Result<List<AqiMonthCountVO>>().error("未查询到数据");
+            return new Result<List<AqiMonthCountVO>>().error(204,"No data.");
         }
 
         return new Result<List<AqiMonthCountVO>>().ok(resultList);
@@ -79,7 +79,7 @@ public class StatisticsServiceImpl extends CrudServiceImpl<StatisticsDao, Statis
         CoverageVO result = statisticsDao.getCoverageInfo();
 
         if (result == null) {
-            return new Result<CoverageVO>().error("未查询到数据");
+            return new Result<CoverageVO>().error(204,"No data.");
         }
 
         return new Result<CoverageVO>().ok(result);
@@ -90,7 +90,7 @@ public class StatisticsServiceImpl extends CrudServiceImpl<StatisticsDao, Statis
         SummaryDataVO result = statisticsDao.getSummaryDataInfo();
 
         if (result == null) {
-            return new Result<SummaryDataVO>().error("未查询到数据");
+            return new Result<SummaryDataVO>().error(204,"No data.");
         }
 
         return new Result<SummaryDataVO>().ok(result);

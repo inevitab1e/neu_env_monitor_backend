@@ -68,14 +68,14 @@ public class SupervisorController {
         SupervisorDTO data = supervisorService.selectByTelId(telId);
 
         if (data == null) {
-            return new Result<SupervisorDTO>().error(403, "The account does not exist");
+            return new Result<SupervisorDTO>().error(401, "The account does not exist.");
         }
 
         if (data.getPassword().equals(password)) {
             return new Result<SupervisorDTO>().ok(data);
         }
 
-        return new Result<SupervisorDTO>().error(403, "Wrong password");
+        return new Result<SupervisorDTO>().error(401, "Wrong password.");
     }
 
     @GetMapping("aqi_list")
@@ -83,7 +83,7 @@ public class SupervisorController {
     public Result<List<AqiDTO>> getAqiList() {
         Result<List<AqiDTO>> result = supervisorService.getAqiList();
         if (CollectionUtils.isEmpty(result.getData())) {
-            return new Result<List<AqiDTO>>().error(403, "获取数据失败");
+            return new Result<List<AqiDTO>>().error(204, "No AQI data.");
         }
         return result;
     }

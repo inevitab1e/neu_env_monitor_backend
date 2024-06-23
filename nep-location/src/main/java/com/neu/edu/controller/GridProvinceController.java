@@ -67,7 +67,7 @@ public class GridProvinceController {
     public Result<List<GridProvinceDTO>> getProvinceList() {
         List<GridProvinceDTO> data = gridProvinceService.list(new HashMap<>());
         if (CollectionUtils.isEmpty(data)) {
-            return new Result<List<GridProvinceDTO>>().error("省信息列表加载失败");
+            return new Result<List<GridProvinceDTO>>().error(204,"No province data.");
         }
         return new Result<List<GridProvinceDTO>>().ok(data);
     }

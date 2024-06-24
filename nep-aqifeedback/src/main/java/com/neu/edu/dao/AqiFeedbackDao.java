@@ -12,5 +12,6 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface AqiFeedbackDao extends BaseDao<AqiFeedbackEntity> {
-	
+
+    void save(AqiFeedbackEntity aqiFeedbackEntity);
 }

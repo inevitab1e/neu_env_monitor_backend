@@ -29,7 +29,7 @@ import java.util.*;
  */
 @Service
 @RequiredArgsConstructor
-public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMemberEntity, com.neu.edu.client.dto.GridMemberDTO> implements GridMemberService {
+public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMemberEntity, GridMemberDTO> implements GridMemberService {
 
     private final AqiFeedbackClient aqiFeedbackClient;
     private final LocationClient locationClient;
@@ -58,7 +58,7 @@ public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMe
 
 
     @Override
-    public List<com.neu.edu.client.dto.GridMemberDTO> selectByGmCode(String gmCode) {
+    public List<GridMemberDTO> selectByGmCode(String gmCode) {
         Map<String, Object> params = new HashMap<>();
         params.put("gmCode", gmCode);
         QueryWrapper<GridMemberEntity> wrapper = getWrapper(params);

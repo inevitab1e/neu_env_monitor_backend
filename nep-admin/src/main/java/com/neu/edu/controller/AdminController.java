@@ -29,7 +29,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("nep/admin")
 @Api(tags = "")
-@CrossOrigin("*")
 public class AdminController {
     @Autowired
     private AdminService adminsService;
@@ -45,7 +44,7 @@ public class AdminController {
 
         for (AdminDTO adminDTO : adminDTOList) {
             if (adminDTO.getPassword().equals(password)) {
-                adminDTO.setToken(JwtUtils.createToken(adminDTO.getAdminId()));
+                adminDTO.setToken(JwtUtils.createToken(adminDTO.getAdminId().longValue()));
                 return new Result<AdminDTO>().ok(adminDTO);
             }
         }
@@ -61,7 +60,7 @@ public class AdminController {
             @ApiImplicitParam(name = Constant.ORDER_FIELD, value = "排序字段", paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = Constant.ORDER, value = "排序方式，可选值(asc、desc)", paramType = "query", dataType = "String")
     })
-    public Result<PageData<AqiFeedbackDetailDTO>> getAqiFeedbackDetailPage(@RequestHeader("user-info") @RequestParam Map<String, Object> params) {
+    public Result<PageData<AqiFeedbackDetailDTO>> getAqiFeedbackDetailPage(@RequestParam Map<String, Object> params) {
         Result<PageData<AqiFeedbackDetailDTO>> result = adminsService.getAqiFeedbackDetailPage(params);
         return result;
     }
@@ -92,6 +91,7 @@ public class AdminController {
     }
 
     @PutMapping("assign_grid_member")
+    @ApiOperation("指派网格员")
     public Result assignGridMember(@RequestBody AqiFeedbackDTO dto) {
         Result result = adminsService.assignGridMember(dto);
         return result;

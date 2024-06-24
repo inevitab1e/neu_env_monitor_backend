@@ -22,7 +22,11 @@ public class JwtUtils {
      * @param userId 登录用户ID
      * @return Token
      */
-    public static String createToken(Integer userId) {
+    public static String createToken(Long userId) {
+        // 清除上一个用户信息
+        UserContext.removeUser();
+        UserContext.removeToken();
+
         //1.设置过期时间(默认 1 天过期)
         Calendar instance = Calendar.getInstance();
         instance.add(Calendar.DATE, 1);

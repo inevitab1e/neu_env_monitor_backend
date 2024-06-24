@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients(defaultConfiguration = DefaultFeignConfig.class)
+@EnableFeignClients(defaultConfiguration = DefaultFeignConfig.class, basePackages = {"com.neu.edu.client.client"})
 @EnableTransactionManagement
 public class NepGridApplication {
 

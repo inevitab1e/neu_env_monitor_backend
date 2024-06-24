@@ -36,5 +36,6 @@ public class SupervisorDTO implements Serializable {
 	@ApiModelProperty(value = "Remarks")
 	private String remarks;
 
-
+	@ApiModelProperty(value = "Token")
+	private String token;
 }

@@ -2,14 +2,12 @@ package com.neu.edu.controller;
 
 import com.neu.edu.common.annotation.LogOperation;
 import com.neu.edu.common.utils.Result;
-import com.neu.edu.common.validator.AssertUtils;
 import com.neu.edu.common.validator.ValidatorUtils;
 import com.neu.edu.dto.StatisticsDTO;
 import com.neu.edu.common.constant.Constant;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.validator.group.AddGroup;
 import com.neu.edu.common.validator.group.DefaultGroup;
-import com.neu.edu.common.validator.group.UpdateGroup;
 import com.neu.edu.service.StatisticsService;
 import com.neu.edu.vo.*;
 import io.swagger.annotations.Api;
@@ -32,7 +30,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("nep/statistics")
 @Api(tags = "")
-@CrossOrigin("*")
 public class StatisticsController {
     @Autowired
     private StatisticsService statisticsService;

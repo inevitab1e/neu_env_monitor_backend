@@ -47,21 +47,27 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
             response.setStatusCode(HttpStatus.UNAUTHORIZED);
             return response.setComplete();
         }
-        Integer userId = decodedJWT.getClaim("userId").asInt();
         // 4. 传递用户信息
         ServerWebExchange swe = exchange.mutate()
-                .request(builder -> builder.header("user-info", userId.toString()))
+                .request(builder -> builder.header("user-info", decodedJWT.getToken()))
                 .build();
         // 5. 放行
         return chain.filter(swe);
     }
 
+    // 排除路径
     private boolean isExcluded(String toString) {
         ArrayList<String> paths = new ArrayList<>();
         paths.add("/nep/admin/login");
         paths.add("/nep/supervisor/login");
         paths.add("/nep/supervisor/sign_up");
         paths.add("/nep/grid/login");
+        paths.add("/nep/statistics/get_province_aqi_index_exceeded_info");
+        paths.add("/nep/statistics/get_aqi_count_info");
+        paths.add("/nep/statistics/get_aqi_month_count_info");
+        paths.add("/nep/statistics/get_coverage_info");
+        paths.add("/nep/statistics/get_summary_data_info");
+
         if (paths.contains(toString)) {
             return true;
         }

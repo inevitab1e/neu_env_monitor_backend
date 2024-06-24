@@ -19,6 +19,41 @@
         <result property="state" column="state"/>
         <result property="remarks" column="remarks"/>
     </resultMap>
+    <insert id="save">
+        INSERT INTO aqi_feedback
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="afId != null">af_id,</if>
+            <if test="telId != null">tel_id,</if>
+            <if test="provinceId != null">province_id,</if>
+            <if test="cityId != null">city_id,</if>
+            <if test="address != null">address,</if>
+            <if test="information != null">information,</if>
+            <if test="estimatedGrade != null">estimated_grade,</if>
+            <if test="afDate != null">af_date,</if>
+            <if test="afTime != null">af_time,</if>
+            <if test="gmId != null">gm_id,</if>
+            <if test="assignDate != null">assign_date,</if>
+            <if test="assignTime != null">assign_time,</if>
+            <if test="state != null">state,</if>
+            <if test="remarks != null">remarks,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="afId != null">#{afId},</if>
+            <if test="telId != null">#{telId},</if>
+            <if test="provinceId != null">#{provinceId},</if>
+            <if test="cityId != null">#{cityId},</if>
+            <if test="address != null">#{address},</if>
+            <if test="information != null">#{information},</if>
+            <if test="estimatedGrade != null">#{estimatedGrade},</if>
+            <if test="afDate != null">#{afDate},</if>
+            <if test="afTime != null">#{afTime},</if>
+            <if test="gmId != null">#{gmId},</if>
+            <if test="assignDate != null">#{assignDate},</if>
+            <if test="assignTime != null">#{assignTime},</if>
+            <if test="state != null">#{state},</if>
+            <if test="remarks != null">#{remarks},</if>
+        </trim>
+    </insert>
 
 
 </mapper>

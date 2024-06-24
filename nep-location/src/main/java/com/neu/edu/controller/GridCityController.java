@@ -32,7 +32,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("nep/gridcity")
 @Api(tags = "")
-@CrossOrigin("*")
 public class GridCityController {
     @Autowired
     private GridCityService gridCityService;

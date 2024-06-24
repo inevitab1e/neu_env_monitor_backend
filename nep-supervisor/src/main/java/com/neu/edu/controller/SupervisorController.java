@@ -3,7 +3,9 @@ package com.neu.edu.controller;
 import com.neu.edu.common.annotation.LogOperation;
 import com.neu.edu.common.constant.Constant;
 import com.neu.edu.common.page.PageData;
+import com.neu.edu.common.utils.JwtUtils;
 import com.neu.edu.common.utils.Result;
+import com.neu.edu.common.utils.UserContext;
 import com.neu.edu.common.validator.ValidatorUtils;
 import com.neu.edu.common.validator.group.AddGroup;
 import com.neu.edu.common.validator.group.DefaultGroup;
@@ -33,7 +35,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("nep/supervisor")
 @Api(tags = "")
-@CrossOrigin("*")
 public class SupervisorController {
     @Autowired
     private SupervisorService supervisorService;
@@ -72,6 +73,8 @@ public class SupervisorController {
         }
 
         if (data.getPassword().equals(password)) {
+
+            data.setToken(JwtUtils.createToken(Long.valueOf(data.getTelId())));
             return new Result<SupervisorDTO>().ok(data);
         }
 
@@ -91,6 +94,7 @@ public class SupervisorController {
     @GetMapping("records")
     @ApiOperation("获取反馈记录")
     public Result<PageData<SupervisorAqiFeedbackRecordVO>> pageRecords(@ApiIgnore @RequestParam Map<String, Object> params) {
+        params.put("telId", UserContext.getUser().toString());
         Result<PageData<SupervisorAqiFeedbackRecordVO>> pageDataResult = supervisorService.pageRecords(params);
         return pageDataResult;
     }

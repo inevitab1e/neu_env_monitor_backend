@@ -27,7 +27,7 @@ public class AssignmentInfoDTO {
 
     private String confirmDate;
     private String confirmTime;
-    private Integer gmId;
+    private Long gmId;
     private Integer so2Value;
     private Integer so2Level;
     private Integer coValue;

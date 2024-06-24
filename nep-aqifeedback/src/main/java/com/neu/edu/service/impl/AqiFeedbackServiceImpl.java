@@ -2,17 +2,14 @@ package com.neu.edu.service.impl;
 
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.core.metadata.IPage;
-import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.service.impl.CrudServiceImpl;
+import com.neu.edu.common.utils.ConvertUtils;
 import com.neu.edu.dao.AqiFeedbackDao;
 import com.neu.edu.dto.AqiFeedbackDTO;
 import com.neu.edu.entity.AqiFeedbackEntity;
 import com.neu.edu.service.AqiFeedbackService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -21,6 +18,13 @@ import java.util.Map;
  */
 @Service
 public class AqiFeedbackServiceImpl extends CrudServiceImpl<AqiFeedbackDao, AqiFeedbackEntity, AqiFeedbackDTO> implements AqiFeedbackService {
+
+    private final AqiFeedbackDao aqiFeedbackDao;
+
+    public AqiFeedbackServiceImpl(AqiFeedbackDao aqiFeedbackDao) {
+        super();
+        this.aqiFeedbackDao = aqiFeedbackDao;
+    }
 
     @Override
     public QueryWrapper<AqiFeedbackEntity> getWrapper(Map<String, Object> params) {
@@ -43,6 +47,10 @@ public class AqiFeedbackServiceImpl extends CrudServiceImpl<AqiFeedbackDao, AqiF
         return wrapper;
     }
 
+    public void save(AqiFeedbackDTO dto) {
+        AqiFeedbackEntity aqiFeedbackEntity = ConvertUtils.sourceToTarget(dto, AqiFeedbackEntity.class);
+        aqiFeedbackDao.save(aqiFeedbackEntity);
+    }
 //    @Override
 //    public PageData<AqiFeedbackDTO> pageByTelId(Map<String, Object> params, String telId) {
 //        Map<String, Object> selectParams = new HashMap<>();

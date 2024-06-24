@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
 @FeignClient(value = "grid-service")
+// 交给spring管理
+@Resource
 public interface GridClient {
 
     @GetMapping("nep/grid/get_gridmember_by_location")

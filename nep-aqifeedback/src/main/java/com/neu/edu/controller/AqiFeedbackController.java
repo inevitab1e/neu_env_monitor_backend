@@ -31,7 +31,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("nep/aqifeedback")
 @Api(tags = "")
-@CrossOrigin("*")
 public class AqiFeedbackController {
     @Autowired
     private AqiFeedbackService aqiFeedbackService;
@@ -44,7 +43,7 @@ public class AqiFeedbackController {
             @ApiImplicitParam(name = Constant.ORDER_FIELD, value = "排序字段", paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = Constant.ORDER, value = "排序方式，可选值(asc、desc)", paramType = "query", dataType = "String")
     })
-    public Result<PageData<AqiFeedbackDTO>> page(@ApiIgnore @RequestHeader("user-info") @RequestParam Map<String, Object> params) {
+    public Result<PageData<AqiFeedbackDTO>> page(@ApiIgnore @RequestParam Map<String, Object> params) {
         PageData<AqiFeedbackDTO> page = aqiFeedbackService.page(params);
 
         if (CollectionUtils.isEmpty(page.getList())) {

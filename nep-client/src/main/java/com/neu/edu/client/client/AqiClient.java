@@ -6,9 +6,12 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @FeignClient(value = "aqi-service")
+// 交给spring管理
+@Resource
 public interface AqiClient {
     @GetMapping("nep/aqi/")
     Result<List<AqiDTO>> getAqiList();

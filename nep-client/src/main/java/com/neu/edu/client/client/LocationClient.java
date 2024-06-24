@@ -7,9 +7,12 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @FeignClient(value = "location-service")
+// 交给spring管理
+@Resource
 public interface LocationClient {
     @GetMapping("nep/gridcity/{cityId}")
     Result<GridCityDTO> getCityByid(@PathVariable("cityId") Integer cityId);

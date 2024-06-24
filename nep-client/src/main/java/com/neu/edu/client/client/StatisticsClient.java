@@ -10,10 +10,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
 @FeignClient(value = "statistics-service")
+// 交给spring管理
+@Resource
 public interface StatisticsClient {
     @GetMapping("nep/statistics/page")
     Result<PageData<StatisticsDTO>> page(@RequestParam Map<String, Object> params);

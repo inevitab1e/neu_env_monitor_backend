@@ -19,7 +19,7 @@ public class AqiFeedbackDTO implements Serializable {
     private static final long serialVersionUID = 1L;
 
 	@ApiModelProperty(value = "Air Quality Public Supervision Feedback Information ID")
-	private Integer afId;
+	private Long afId;
 
 	@ApiModelProperty(value = "Public Supervisor ID (i.e., phone number)")
 	private String telId;

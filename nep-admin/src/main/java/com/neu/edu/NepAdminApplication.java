@@ -8,7 +8,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableDiscoveryClient
-@EnableFeignClients(defaultConfiguration = DefaultFeignConfig.class)
+@EnableFeignClients(defaultConfiguration = DefaultFeignConfig.class, basePackages = {"com.neu.edu.client.client"})
 public class NepAdminApplication {
 
     public static void main(String[] args) {

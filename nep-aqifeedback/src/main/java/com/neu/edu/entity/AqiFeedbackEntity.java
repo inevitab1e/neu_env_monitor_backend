@@ -18,7 +18,7 @@ public class AqiFeedbackEntity {
      * Air Quality Public Supervision Feedback Information ID
      */
     @TableId
-    private Integer afId;
+    private Long afId;
     /**
      * Public Supervisor ID (i.e., phone number)
      */

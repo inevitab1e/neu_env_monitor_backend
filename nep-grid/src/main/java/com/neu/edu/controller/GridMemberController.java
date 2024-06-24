@@ -3,7 +3,9 @@ package com.neu.edu.controller;
 import com.neu.edu.common.annotation.LogOperation;
 import com.neu.edu.common.constant.Constant;
 import com.neu.edu.common.page.PageData;
+import com.neu.edu.common.utils.JwtUtils;
 import com.neu.edu.common.utils.Result;
+import com.neu.edu.common.utils.UserContext;
 import com.neu.edu.common.validator.ValidatorUtils;
 import com.neu.edu.common.validator.group.AddGroup;
 import com.neu.edu.common.validator.group.DefaultGroup;
@@ -31,7 +33,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("nep/grid")
 @Api(tags = "")
-@CrossOrigin("*")
 public class GridMemberController {
     @Autowired
     private GridMemberService gridMemberService;
@@ -70,6 +71,7 @@ public class GridMemberController {
 
         for (GridMemberDTO adminDTO : gridMemberDTOList) {
             if (adminDTO.getPassword().equals(password)) {
+                adminDTO.setToken(JwtUtils.createToken(adminDTO.getGmId().longValue()));
                 return new Result<GridMemberDTO>().ok(adminDTO);
             }
         }
@@ -80,6 +82,7 @@ public class GridMemberController {
     @GetMapping("get_assignments")
     @ApiOperation("根据gmId获取任务")
     public Result<PageData<AssignmentInfoDTO>> getAssignments(@RequestParam Map<String, Object> params) {
+        params.put("gmId", UserContext.getUser());
         Result<PageData<AssignmentInfoDTO>> data = gridMemberService.getAssignments(params);
         return data;
     }
@@ -89,6 +92,7 @@ public class GridMemberController {
     public Result confirm(@RequestBody AssignmentInfoDTO dto) {
         //效验数据
 //        ValidatorUtils.validateEntity(dto, AddGroup.class, DefaultGroup.class);
+        dto.setGmId(UserContext.getUser());
         gridMemberService.confirm(dto);
 
         return new Result();

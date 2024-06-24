@@ -33,7 +33,6 @@ import java.util.Map;
 @RestController
 @RequestMapping("nep/gridprovince")
 @Api(tags = "")
-@CrossOrigin("*")
 public class GridProvinceController {
     @Autowired
     private GridProvinceService gridProvinceService;

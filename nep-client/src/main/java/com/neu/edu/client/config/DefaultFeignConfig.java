@@ -16,7 +16,7 @@ public class DefaultFeignConfig {
                 String token = UserContext.getToken();
                 // 如果token存在 则将openfeign发出的请求请求头加上当前的token 从而使得有权访问需要调用的方法
                 if (StrUtil.isNotBlank(token)) {
-                    template.header("user-info", UserContext.getToken());
+                    template.header("user_info", UserContext.getToken());
                 }
             }
         };

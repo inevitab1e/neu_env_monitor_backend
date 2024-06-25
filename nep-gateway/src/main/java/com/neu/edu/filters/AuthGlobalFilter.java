@@ -33,7 +33,7 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         }
         // 2. 获取token
         String token = null;
-        List<String> headers = request.getHeaders().get("user-info");
+        List<String> headers = request.getHeaders().get("user_info");
         if (!CollectionUtils.isEmpty(headers)) {
             token = headers.get(0);
         }
@@ -49,7 +49,7 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         }
         // 4. 传递用户信息
         ServerWebExchange swe = exchange.mutate()
-                .request(builder -> builder.header("user-info", decodedJWT.getToken()))
+                .request(builder -> builder.header("user_info", decodedJWT.getToken()))
                 .build();
         // 5. 放行
         return chain.filter(swe);

@@ -65,6 +65,13 @@ public class AdminController {
         return result;
     }
 
+    @GetMapping("get_aqifeedback_detail_by_afId/{afId}")
+    @ApiOperation("根据afId得到AQI反馈详情")
+    public Result<AqiFeedbackDetailDTO> getAqiFeedbackDetailByAfId(@PathVariable("afId") Long afId) {
+        Result<AqiFeedbackDetailDTO> result = adminsService.getAqiFeedbackDetailByAfId(afId);
+        return result;
+    }
+
     @GetMapping("get_grid_province_list")
     @ApiOperation("得到网格省份列表")
     public Result<List<GridProvinceDTO>> getGridProvinceList() {
@@ -101,6 +108,13 @@ public class AdminController {
     @ApiOperation("分页得到已确认的AQI反馈")
     public Result<PageData<ConfirmedAqiFeedbackDTO>> getConfirmedAqiFeedbackPage(@RequestParam Map<String, Object> params) {
         Result<PageData<ConfirmedAqiFeedbackDTO>> result = adminsService.getConfirmedAqiFeedbackPage(params);
+        return result;
+    }
+
+    @GetMapping("get_confirmed_aqifeedback_by_id/{id}")
+    @ApiOperation("根据id查询已确认的AQI反馈详情")
+    public Result<ConfirmedAqiFeedbackDTO> getConfirmedAqiFeedbackById(@PathVariable("id") Long id) {
+        Result<ConfirmedAqiFeedbackDTO> result = adminsService.getConfirmedAqiFeedbackById(id);
         return result;
     }
 

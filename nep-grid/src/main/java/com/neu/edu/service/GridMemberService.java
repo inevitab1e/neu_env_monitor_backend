@@ -25,4 +25,6 @@ public interface GridMemberService extends CrudService<GridMemberEntity, GridMem
     void confirm(AssignmentInfoDTO dto);
 
     List<GridMemberDTO> getGridMemberByLocation(Map<String, Object> params);
+
+    Result<AssignmentInfoDTO> getAssignmentByAfId(Long afId);
 }

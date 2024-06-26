@@ -53,11 +53,11 @@ public class AqiFeedbackController {
     }
 
 
-    @GetMapping("{id}")
+    @GetMapping("{afId}")
     @ApiOperation("信息")
     @RequiresPermissions("demo:aqifeedback:info")
-    public Result<AqiFeedbackDTO> get(@PathVariable("id") Long id) {
-        AqiFeedbackDTO data = aqiFeedbackService.get(id);
+    public Result<AqiFeedbackDTO> get(@PathVariable("afId") Long afId) {
+        AqiFeedbackDTO data = aqiFeedbackService.get(afId);
 
         return new Result<AqiFeedbackDTO>().ok(data);
     }

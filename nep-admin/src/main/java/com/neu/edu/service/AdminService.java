@@ -41,4 +41,8 @@ public interface AdminService extends CrudService<AdminEntity, AdminDTO> {
     Result<List<GridCityDTO>> getCityListByProvinceId(Integer provinceId);
 
     Result assignGridMember(AqiFeedbackDTO dto);
+
+    Result<AqiFeedbackDetailDTO> getAqiFeedbackDetailByAfId(Long afId);
+
+    Result<ConfirmedAqiFeedbackDTO> getConfirmedAqiFeedbackById(Long id);
 }

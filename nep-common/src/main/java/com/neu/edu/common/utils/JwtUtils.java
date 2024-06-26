@@ -24,7 +24,7 @@ public class JwtUtils {
      */
     public static String createToken(Long userId) {
         // 清除上一个用户信息
-        UserContext.removeUser();
+        UserContext.removeUserId();
         UserContext.removeToken();
 
         //1.设置过期时间(默认 1 天过期)

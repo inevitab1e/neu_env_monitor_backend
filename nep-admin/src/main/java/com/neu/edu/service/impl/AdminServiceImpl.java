@@ -64,7 +64,7 @@ public class AdminServiceImpl extends CrudServiceImpl<AdminDao, AdminEntity, Adm
     public Result<PageData<AqiFeedbackDetailDTO>> getAqiFeedbackDetailPage(Map<String, Object> params) {
         Result<PageData<AqiFeedbackDTO>> basePage = aqiFeedbackClient.page(params);
         if (CollectionUtils.isEmpty(basePage.getData().getList())) {
-            return new Result<PageData<AqiFeedbackDetailDTO>>().error(204,"No data found.");
+            return new Result<PageData<AqiFeedbackDetailDTO>>().error(204, "No data found.");
         }
 
         int total = basePage.getData().getTotal();
@@ -73,20 +73,21 @@ public class AdminServiceImpl extends CrudServiceImpl<AdminDao, AdminEntity, Adm
 
         for (AqiFeedbackDetailDTO aqiFeedbackDetailDTO : aqiFeedbackDetailDTOS) {
 
-            String telId = aqiFeedbackDetailDTO.getTelId();
-            Result<SupervisorDTO> supervisorDTOResult = supervisorClient.get(telId);
-            String realName = supervisorDTOResult.getData().getRealName();
-            aqiFeedbackDetailDTO.setRealName(realName);
-
-            Integer cityId = aqiFeedbackDetailDTO.getCityId();
-            Result<GridCityDTO> cityDTOResult = locationClient.getCityByid(cityId);
-            String cityName = cityDTOResult.getData().getCityName();
-            aqiFeedbackDetailDTO.setCityName(cityName);
-
-            Integer provinceId = aqiFeedbackDetailDTO.getProvinceId();
-            Result<GridProvinceDTO> provinceDTOResult = locationClient.getProvinceById(provinceId);
-            String provinceName = provinceDTOResult.getData().getProvinceName();
-            aqiFeedbackDetailDTO.setProvinceName(provinceName);
+//            String telId = aqiFeedbackDetailDTO.getTelId();
+//            Result<SupervisorDTO> supervisorDTOResult = supervisorClient.get(telId);
+//            String realName = supervisorDTOResult.getData().getRealName();
+//            aqiFeedbackDetailDTO.setRealName(realName);
+//
+//            Integer cityId = aqiFeedbackDetailDTO.getCityId();
+//            Result<GridCityDTO> cityDTOResult = locationClient.getCityByid(cityId);
+//            String cityName = cityDTOResult.getData().getCityName();
+//            aqiFeedbackDetailDTO.setCityName(cityName);
+//
+//            Integer provinceId = aqiFeedbackDetailDTO.getProvinceId();
+//            Result<GridProvinceDTO> provinceDTOResult = locationClient.getProvinceById(provinceId);
+//            String provinceName = provinceDTOResult.getData().getProvinceName();
+//            aqiFeedbackDetailDTO.setProvinceName(provinceName);
+            buildAqifeedbackDetailDTO(aqiFeedbackDetailDTO);
         }
 
         PageData<AqiFeedbackDetailDTO> pageResult = new PageData<>(aqiFeedbackDetailDTOS, total);
@@ -108,20 +109,22 @@ public class AdminServiceImpl extends CrudServiceImpl<AdminDao, AdminEntity, Adm
         List<ConfirmedAqiFeedbackDTO> confirmedAqiFeedbackDTOS = ConvertUtils.sourceToTarget(statisticsDTOS, ConfirmedAqiFeedbackDTO.class);
 
         for (ConfirmedAqiFeedbackDTO confirmedAqiFeedbackDTO : confirmedAqiFeedbackDTOS) {
-            String provinceName = locationClient.getProvinceById(confirmedAqiFeedbackDTO.getProvinceId()).getData().getProvinceName();
-            confirmedAqiFeedbackDTO.setProvinceName(provinceName);
+//            String provinceName = locationClient.getProvinceById(confirmedAqiFeedbackDTO.getProvinceId()).getData().getProvinceName();
+//            confirmedAqiFeedbackDTO.setProvinceName(provinceName);
+//
+//            String cityName = locationClient.getCityByid(confirmedAqiFeedbackDTO.getCityId()).getData().getCityName();
+//            confirmedAqiFeedbackDTO.setCityName(cityName);
+//
+//            GridMemberDTO gridMemberDTO = gridClient.get(confirmedAqiFeedbackDTO.getGmId().longValue()).getData();
+//            String gmName = gridMemberDTO.getGmName();
+//            String tel = gridMemberDTO.getTel();
+//            confirmedAqiFeedbackDTO.setGmName(gmName);
+//            confirmedAqiFeedbackDTO.setTel(tel);
+//
+//            String fdName = supervisorClient.get(confirmedAqiFeedbackDTO.getFdId()).getData().getRealName();
+//            confirmedAqiFeedbackDTO.setFdName(fdName);
 
-            String cityName = locationClient.getCityByid(confirmedAqiFeedbackDTO.getCityId()).getData().getCityName();
-            confirmedAqiFeedbackDTO.setCityName(cityName);
-
-            GridMemberDTO gridMemberDTO = gridClient.get(confirmedAqiFeedbackDTO.getGmId().longValue()).getData();
-            String gmName = gridMemberDTO.getGmName();
-            String tel = gridMemberDTO.getTel();
-            confirmedAqiFeedbackDTO.setGmName(gmName);
-            confirmedAqiFeedbackDTO.setTel(tel);
-
-            String fdName = supervisorClient.get(confirmedAqiFeedbackDTO.getFdId()).getData().getRealName();
-            confirmedAqiFeedbackDTO.setFdName(fdName);
+            buildConfirmedAqiFeedbackDTO(confirmedAqiFeedbackDTO);
         }
 
         PageData<ConfirmedAqiFeedbackDTO> pageResult = new PageData<>(confirmedAqiFeedbackDTOS, total);
@@ -177,8 +180,61 @@ public class AdminServiceImpl extends CrudServiceImpl<AdminDao, AdminEntity, Adm
         return result;
     }
 
-//    @Override
-//    public AdminDTO get(Long id) {
-//        return super.get(id);
-//    }
+    @Override
+    public Result<AqiFeedbackDetailDTO> getAqiFeedbackDetailByAfId(Long afId) {
+        Result<AqiFeedbackDTO> baseResult = aqiFeedbackClient.get(afId);
+        AqiFeedbackDTO baseData = baseResult.getData();
+        if (baseData == null) {
+            return new Result<AqiFeedbackDetailDTO>().error(204, "Failed to load data.");
+        }
+        AqiFeedbackDetailDTO data = ConvertUtils.sourceToTarget(baseData, AqiFeedbackDetailDTO.class);
+        buildAqifeedbackDetailDTO(data);
+        return new Result<AqiFeedbackDetailDTO>().ok(data);
+    }
+
+    @Override
+    public Result<ConfirmedAqiFeedbackDTO> getConfirmedAqiFeedbackById(Long id) {
+        Result<StatisticsDTO> baseResult = statisticsClient.get(id);
+        StatisticsDTO baseData = baseResult.getData();
+        if (baseData == null) {
+            return new Result<ConfirmedAqiFeedbackDTO>().error(204, "Failed to load data.");
+        }
+        ConfirmedAqiFeedbackDTO data = ConvertUtils.sourceToTarget(baseData, ConfirmedAqiFeedbackDTO.class);
+        buildConfirmedAqiFeedbackDTO(data);
+        return new Result<ConfirmedAqiFeedbackDTO>().ok(data);
+    }
+
+    private void buildAqifeedbackDetailDTO(AqiFeedbackDetailDTO aqiFeedbackDetailDTO) {
+        String telId = aqiFeedbackDetailDTO.getTelId();
+        Result<SupervisorDTO> supervisorDTOResult = supervisorClient.get(telId);
+        String realName = supervisorDTOResult.getData().getRealName();
+        aqiFeedbackDetailDTO.setRealName(realName);
+
+        Integer cityId = aqiFeedbackDetailDTO.getCityId();
+        Result<GridCityDTO> cityDTOResult = locationClient.getCityByid(cityId);
+        String cityName = cityDTOResult.getData().getCityName();
+        aqiFeedbackDetailDTO.setCityName(cityName);
+
+        Integer provinceId = aqiFeedbackDetailDTO.getProvinceId();
+        Result<GridProvinceDTO> provinceDTOResult = locationClient.getProvinceById(provinceId);
+        String provinceName = provinceDTOResult.getData().getProvinceName();
+        aqiFeedbackDetailDTO.setProvinceName(provinceName);
+    }
+
+    private void buildConfirmedAqiFeedbackDTO(ConfirmedAqiFeedbackDTO confirmedAqiFeedbackDTO) {
+        String provinceName = locationClient.getProvinceById(confirmedAqiFeedbackDTO.getProvinceId()).getData().getProvinceName();
+        confirmedAqiFeedbackDTO.setProvinceName(provinceName);
+
+        String cityName = locationClient.getCityByid(confirmedAqiFeedbackDTO.getCityId()).getData().getCityName();
+        confirmedAqiFeedbackDTO.setCityName(cityName);
+
+        GridMemberDTO gridMemberDTO = gridClient.get(confirmedAqiFeedbackDTO.getGmId().longValue()).getData();
+        String gmName = gridMemberDTO.getGmName();
+        String tel = gridMemberDTO.getTel();
+        confirmedAqiFeedbackDTO.setGmName(gmName);
+        confirmedAqiFeedbackDTO.setTel(tel);
+
+        String fdName = supervisorClient.get(confirmedAqiFeedbackDTO.getFdId()).getData().getRealName();
+        confirmedAqiFeedbackDTO.setFdName(fdName);
+    }
 }

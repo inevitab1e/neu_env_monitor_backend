@@ -68,7 +68,7 @@ public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMe
 
     @Override
     public Result<PageData<AssignmentInfoDTO>> getAssignments(Map<String, Object> params) {
-//        params.put("gmId", UserContext.getUser());
+        params.put("gmId", UserContext.getUserId());
         Result<PageData<AqiFeedbackDTO>> baseResult = aqiFeedbackClient.page(params);
         if (baseResult.getData() == null || CollectionUtils.isEmpty(baseResult.getData().getList())) {
             return new Result<PageData<AssignmentInfoDTO>>().error(204, "No task assigned");
@@ -79,19 +79,18 @@ public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMe
         List<AssignmentInfoDTO> assignmentInfoDTOS = ConvertUtils.sourceToTarget(list, AssignmentInfoDTO.class);
 
         for (AssignmentInfoDTO assignmentInfoDTO : assignmentInfoDTOS) {
-            Result<SupervisorDTO> supervisorDTOResult = supervisorClient.get(assignmentInfoDTO.getTelId());
-            String realName = supervisorDTOResult.getData().getRealName();
-            assignmentInfoDTO.setRealName(realName);
-
-            Result<GridCityDTO> gridCityDTOResult = locationClient.getCityByid(assignmentInfoDTO.getCityId());
-            String cityName = gridCityDTOResult.getData().getCityName();
-            assignmentInfoDTO.setCityName(cityName);
-
-            Result<GridProvinceDTO> gridProvinceDTOResult = locationClient.getProvinceById(assignmentInfoDTO.getProvinceId());
-            String provinceName = gridProvinceDTOResult.getData().getProvinceName();
-            assignmentInfoDTO.setProvinceName(provinceName);
-
-
+//            Result<SupervisorDTO> supervisorDTOResult = supervisorClient.get(assignmentInfoDTO.getTelId());
+//            String realName = supervisorDTOResult.getData().getRealName();
+//            assignmentInfoDTO.setRealName(realName);
+//
+//            Result<GridCityDTO> gridCityDTOResult = locationClient.getCityByid(assignmentInfoDTO.getCityId());
+//            String cityName = gridCityDTOResult.getData().getCityName();
+//            assignmentInfoDTO.setCityName(cityName);
+//
+//            Result<GridProvinceDTO> gridProvinceDTOResult = locationClient.getProvinceById(assignmentInfoDTO.getProvinceId());
+//            String provinceName = gridProvinceDTOResult.getData().getProvinceName();
+//            assignmentInfoDTO.setProvinceName(provinceName);
+            buildAssignmentInfoDTO(assignmentInfoDTO);
         }
 
         PageData<AssignmentInfoDTO> pageData = new PageData<>(assignmentInfoDTOS, total);
@@ -111,7 +110,7 @@ public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMe
     }
 
     @Override
-    public List<com.neu.edu.client.dto.GridMemberDTO> getGridMemberByLocation(Map<String, Object> params) {
+    public List<GridMemberDTO> getGridMemberByLocation(Map<String, Object> params) {
         String provinceId = (String) params.get("provinceId");
         String cityId = (String) params.get("cityId");
 
@@ -129,5 +128,38 @@ public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMe
 
         return gridMemberDTOList;
 
+    }
+
+    @Override
+    public Result<AssignmentInfoDTO> getAssignmentByAfId(Long afId) {
+        Result<AqiFeedbackDTO> baseResult = aqiFeedbackClient.get(afId);
+        AqiFeedbackDTO baseData = baseResult.getData();
+        if (baseData == null) {
+            return new Result<AssignmentInfoDTO>().error(204, "Failed to load data.");
+        }
+        AssignmentInfoDTO data = ConvertUtils.sourceToTarget(baseData, AssignmentInfoDTO.class);
+        buildAssignmentInfoDTO(data);
+        return new Result<AssignmentInfoDTO>().ok(data);
+    }
+
+     /**
+      * 抽取的搭建AssignmentInfoDTO的方法
+      * @descriptions: TODO
+      * @author: FEI BO
+      * @date: 2024-06-26 9:52
+      * @version: 1.0
+      */
+    private void buildAssignmentInfoDTO(AssignmentInfoDTO assignmentInfoDTO) {
+        Result<SupervisorDTO> supervisorDTOResult = supervisorClient.get(assignmentInfoDTO.getTelId());
+        String realName = supervisorDTOResult.getData().getRealName();
+        assignmentInfoDTO.setRealName(realName);
+
+        Result<GridCityDTO> gridCityDTOResult = locationClient.getCityByid(assignmentInfoDTO.getCityId());
+        String cityName = gridCityDTOResult.getData().getCityName();
+        assignmentInfoDTO.setCityName(cityName);
+
+        Result<GridProvinceDTO> gridProvinceDTOResult = locationClient.getProvinceById(assignmentInfoDTO.getProvinceId());
+        String provinceName = gridProvinceDTOResult.getData().getProvinceName();
+        assignmentInfoDTO.setProvinceName(provinceName);
     }
 }

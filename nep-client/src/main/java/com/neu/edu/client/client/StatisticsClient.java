@@ -38,4 +38,7 @@ public interface StatisticsClient {
 
     @PostMapping("nep/statistics/save")
     Result save(@RequestBody StatisticsDTO dto);
+
+    @GetMapping("nep/statistics/{id}")
+    Result<StatisticsDTO> get(Long id);
 }

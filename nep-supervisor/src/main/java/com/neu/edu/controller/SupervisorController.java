@@ -94,7 +94,7 @@ public class SupervisorController {
     @GetMapping("records")
     @ApiOperation("获取反馈记录")
     public Result<PageData<SupervisorAqiFeedbackRecordVO>> pageRecords(@ApiIgnore @RequestParam Map<String, Object> params) {
-        params.put("telId", UserContext.getUser().toString());
+        params.put("telId", UserContext.getUserId().toString());
         Result<PageData<SupervisorAqiFeedbackRecordVO>> pageDataResult = supervisorService.pageRecords(params);
         return pageDataResult;
     }

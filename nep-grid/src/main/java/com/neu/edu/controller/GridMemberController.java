@@ -82,9 +82,16 @@ public class GridMemberController {
     @GetMapping("get_assignments")
     @ApiOperation("根据gmId获取任务")
     public Result<PageData<AssignmentInfoDTO>> getAssignments(@RequestParam Map<String, Object> params) {
-        params.put("gmId", UserContext.getUser());
+        params.put("gmId", UserContext.getUserId());
         Result<PageData<AssignmentInfoDTO>> data = gridMemberService.getAssignments(params);
         return data;
+    }
+
+    @GetMapping("get_assignment_by_afId/{afId}")
+    @ApiOperation("根据afId获取任务详情")
+    public Result<AssignmentInfoDTO> getAssignmentByAfId(@PathVariable("afId") Long afId) {
+        Result<AssignmentInfoDTO> result = gridMemberService.getAssignmentByAfId(afId);
+        return result;
     }
 
     @PostMapping("confirm")
@@ -92,7 +99,7 @@ public class GridMemberController {
     public Result confirm(@RequestBody AssignmentInfoDTO dto) {
         //效验数据
 //        ValidatorUtils.validateEntity(dto, AddGroup.class, DefaultGroup.class);
-        dto.setGmId(UserContext.getUser());
+        dto.setGmId(UserContext.getUserId());
         gridMemberService.confirm(dto);
 
         return new Result();

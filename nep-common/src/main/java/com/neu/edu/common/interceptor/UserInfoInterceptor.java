@@ -21,7 +21,7 @@ public class UserInfoInterceptor implements HandlerInterceptor {
         if (StrUtil.isNotBlank(userInfo)) {
             Long userId = JwtUtils.parseToken(userInfo).getClaim("userId").asLong();
             // 将当前用户信息存入线程
-            UserContext.setUser(userId);
+            UserContext.setUserId(userId);
             UserContext.setToken(userInfo);
         }
         // 3. 放行
@@ -31,6 +31,6 @@ public class UserInfoInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         // 4. 清理用户信息
-        UserContext.removeUser();
+        UserContext.removeUserId();
     }
 }

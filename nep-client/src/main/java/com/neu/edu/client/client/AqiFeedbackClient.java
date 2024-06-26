@@ -16,6 +16,9 @@ public interface AqiFeedbackClient {
     @GetMapping("nep/aqifeedback/page")
     Result<PageData<AqiFeedbackDTO>> page(@RequestParam Map<String, Object> params);
 
+    @GetMapping("nep/aqifeedback/{afId}")
+    Result<AqiFeedbackDTO> get(@PathVariable("afId") Long afId);
+
     @PutMapping("nep/aqifeedback/update")
     Result update(@RequestBody AqiFeedbackDTO dto);
 

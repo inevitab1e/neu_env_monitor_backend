@@ -1,5 +1,6 @@
 package com.neu.edu.client.client;
 
+import com.neu.edu.client.client.fallback.GridClientFallbackFactory;
 import com.neu.edu.client.dto.GridMemberDTO;
 import com.neu.edu.common.utils.Result;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -11,7 +12,7 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(value = "grid-service")
+@FeignClient(value = "grid-service", fallbackFactory = GridClientFallbackFactory.class)
 // 交给spring管理
 @Resource
 public interface GridClient {

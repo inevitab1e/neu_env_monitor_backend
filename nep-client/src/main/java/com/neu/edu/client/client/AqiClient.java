@@ -1,5 +1,6 @@
 package com.neu.edu.client.client;
 
+import com.neu.edu.client.client.fallback.AqiClientFallbackFactory;
 import com.neu.edu.common.utils.Result;
 import com.neu.edu.client.dto.AqiDTO;
 import org.springframework.cloud.openfeign.FeignClient;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.annotation.Resource;
 import java.util.List;
 
-@FeignClient(value = "aqi-service")
+@FeignClient(value = "aqi-service", fallbackFactory = AqiClientFallbackFactory.class)
 // 交给spring管理
 @Resource
 public interface AqiClient {

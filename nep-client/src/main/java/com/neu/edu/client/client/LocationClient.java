@@ -1,5 +1,6 @@
 package com.neu.edu.client.client;
 
+import com.neu.edu.client.client.fallback.LocationClientFallbackFactory;
 import com.neu.edu.client.dto.GridCityDTO;
 import com.neu.edu.client.dto.GridProvinceDTO;
 import com.neu.edu.common.utils.Result;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.annotation.Resource;
 import java.util.List;
 
-@FeignClient(value = "location-service")
+@FeignClient(value = "location-service", fallbackFactory = LocationClientFallbackFactory.class)
 // 交给spring管理
 @Resource
 public interface LocationClient {

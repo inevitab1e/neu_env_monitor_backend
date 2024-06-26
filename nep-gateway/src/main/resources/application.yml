@@ -1,13 +1,22 @@
 server:
   port: 8080
-
+feign:
+  okhttp:
+    enabled: true
+  sentinel:
+    enabled: true
 spring:
-#  application:
-#    name: nep-gateway
+  #  application:
+  #    name: nep-gateway
   cloud:
-#    nacos:
-#      discovery:
-#        server-addr: 127.0.0.1:8848
+    #    nacos:
+    #      discovery:
+    #        server-addr: 127.0.0.1:8848
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: localhost:9000
+      http-method-specify: true
     gateway:
       routes:
         - id: admin-service

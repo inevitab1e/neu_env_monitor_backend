@@ -47,6 +47,7 @@ public class AqiFeedbackServiceImpl extends CrudServiceImpl<AqiFeedbackDao, AqiF
         return wrapper;
     }
 
+    @Override
     public void save(AqiFeedbackDTO dto) {
         AqiFeedbackEntity aqiFeedbackEntity = ConvertUtils.sourceToTarget(dto, AqiFeedbackEntity.class);
         aqiFeedbackDao.save(aqiFeedbackEntity);

@@ -142,13 +142,14 @@ public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMe
         return new Result<AssignmentInfoDTO>().ok(data);
     }
 
-     /**
-      * 抽取的搭建AssignmentInfoDTO的方法
-      * @descriptions: TODO
-      * @author: FEI BO
-      * @date: 2024-06-26 9:52
-      * @version: 1.0
-      */
+    /**
+     * 抽取的搭建AssignmentInfoDTO的方法
+     *
+     * @descriptions: TODO
+     * @author: FEI BO
+     * @date: 2024-06-26 9:52
+     * @version: 1.0
+     */
     private void buildAssignmentInfoDTO(AssignmentInfoDTO assignmentInfoDTO) {
         Result<SupervisorDTO> supervisorDTOResult = supervisorClient.get(assignmentInfoDTO.getTelId());
         String realName = supervisorDTOResult.getData().getRealName();

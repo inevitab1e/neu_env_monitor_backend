@@ -1,5 +1,6 @@
 package com.neu.edu.client.client;
 
+import com.neu.edu.client.client.fallback.StatisticsClientFallbackFactory;
 import com.neu.edu.client.vo.*;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.utils.Result;
@@ -11,7 +12,7 @@ import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 
-@FeignClient(value = "statistics-service")
+@FeignClient(value = "statistics-service", fallbackFactory = StatisticsClientFallbackFactory.class)
 // 交给spring管理
 @Resource
 public interface StatisticsClient {

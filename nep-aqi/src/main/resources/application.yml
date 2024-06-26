@@ -1,6 +1,17 @@
 server:
   port: 8086
-
+feign:
+  okhttp:
+    enabled: true
+  sentinel:
+    enabled: true
+spring:
+  cloud:
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: localhost:9000
+      http-method-specify: true
 #spring:
 #  application:
 #    name: aqi-service

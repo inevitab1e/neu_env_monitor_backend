@@ -5,10 +5,7 @@ import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.utils.Result;
 import com.neu.edu.client.dto.StatisticsDTO;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -40,5 +37,5 @@ public interface StatisticsClient {
     Result save(@RequestBody StatisticsDTO dto);
 
     @GetMapping("nep/statistics/{id}")
-    Result<StatisticsDTO> get(Long id);
+    Result<StatisticsDTO> get(@PathVariable("id") Long id);
 }

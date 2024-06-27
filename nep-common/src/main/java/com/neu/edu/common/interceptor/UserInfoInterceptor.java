@@ -32,5 +32,6 @@ public class UserInfoInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         // 4. 清理用户信息
         UserContext.removeUserId();
+        UserContext.removeToken();
     }
 }

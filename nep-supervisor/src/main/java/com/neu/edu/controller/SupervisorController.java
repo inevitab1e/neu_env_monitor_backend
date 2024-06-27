@@ -3,6 +3,7 @@ package com.neu.edu.controller;
 import com.neu.edu.common.annotation.LogOperation;
 import com.neu.edu.common.constant.Constant;
 import com.neu.edu.common.page.PageData;
+import com.neu.edu.common.redis.RedisUtils;
 import com.neu.edu.common.utils.JwtUtils;
 import com.neu.edu.common.utils.Result;
 import com.neu.edu.common.utils.UserContext;
@@ -39,6 +40,9 @@ public class SupervisorController {
     @Autowired
     private SupervisorService supervisorService;
 
+    @Autowired
+    private RedisUtils redisUtils;
+
     @GetMapping("page")
     @ApiOperation("分页")
     @ApiImplicitParams({
@@ -66,16 +70,16 @@ public class SupervisorController {
     @PostMapping("login")
     @ApiOperation("登录")
     public Result<SupervisorDTO> login(@RequestParam("telId") String telId, @RequestParam("password") String password) {
-        SupervisorDTO data = supervisorService.selectByTelId(telId);
+        SupervisorDTO supervisorDTO = supervisorService.selectByTelId(telId);
 
-        if (data == null) {
+        if (supervisorDTO == null) {
             return new Result<SupervisorDTO>().error(401, "The account does not exist.");
         }
 
-        if (data.getPassword().equals(password)) {
-
-            data.setToken(JwtUtils.createToken(Long.valueOf(data.getTelId())));
-            return new Result<SupervisorDTO>().ok(data);
+        if (supervisorDTO.getPassword().equals(password)) {
+            supervisorDTO.setToken(JwtUtils.createToken(Long.valueOf(supervisorDTO.getTelId())));
+            redisUtils.set(supervisorDTO.getToken(), supervisorDTO.getToken());
+            return new Result<SupervisorDTO>().ok(supervisorDTO);
         }
 
         return new Result<SupervisorDTO>().error(401, "Wrong password.");

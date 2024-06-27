@@ -3,6 +3,7 @@ package com.neu.edu.controller;
 import com.neu.edu.common.annotation.LogOperation;
 import com.neu.edu.common.constant.Constant;
 import com.neu.edu.common.page.PageData;
+import com.neu.edu.common.redis.RedisUtils;
 import com.neu.edu.common.utils.JwtUtils;
 import com.neu.edu.common.utils.Result;
 import com.neu.edu.common.utils.UserContext;
@@ -37,6 +38,9 @@ public class GridMemberController {
     @Autowired
     private GridMemberService gridMemberService;
 
+    @Autowired
+    private RedisUtils redisUtils;
+
     @GetMapping("page")
     @ApiOperation("分页")
     @ApiImplicitParams({
@@ -69,10 +73,11 @@ public class GridMemberController {
             return new Result<GridMemberDTO>().error(401, "The account does not exist.");
         }
 
-        for (GridMemberDTO adminDTO : gridMemberDTOList) {
-            if (adminDTO.getPassword().equals(password)) {
-                adminDTO.setToken(JwtUtils.createToken(adminDTO.getGmId().longValue()));
-                return new Result<GridMemberDTO>().ok(adminDTO);
+        for (GridMemberDTO gridMemberDTO : gridMemberDTOList) {
+            if (gridMemberDTO.getPassword().equals(password)) {
+                gridMemberDTO.setToken(JwtUtils.createToken(gridMemberDTO.getGmId().longValue()));
+                redisUtils.set(gridMemberDTO.getToken(), gridMemberDTO.getToken());
+                return new Result<GridMemberDTO>().ok(gridMemberDTO);
             }
         }
 

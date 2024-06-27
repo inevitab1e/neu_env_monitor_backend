@@ -6,12 +6,11 @@ feign:
   sentinel:
     enabled: true
 spring:
-  #  application:
-  #    name: nep-gateway
+  redis:
+    host: localhost
+    port: 6379
+    database: 0
   cloud:
-    #    nacos:
-    #      discovery:
-    #        server-addr: 127.0.0.1:8848
     sentinel:
       transport:
         port: 8719

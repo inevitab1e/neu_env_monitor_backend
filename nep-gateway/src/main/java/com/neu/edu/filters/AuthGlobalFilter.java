@@ -1,6 +1,8 @@
 package com.neu.edu.filters;
 
+import cn.hutool.core.util.StrUtil;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.neu.edu.common.redis.RedisUtils;
 import com.neu.edu.common.utils.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
@@ -22,6 +24,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthGlobalFilter implements GlobalFilter, Ordered {
 
+    private final RedisUtils redisUtils;
+
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         // 1. 获取request对象
@@ -42,17 +46,33 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         try {
             decodedJWT = JwtUtils.parseToken(token);
         } catch (Exception e) {
-            // token校验失败 拦截响应状态码401
-            ServerHttpResponse response = exchange.getResponse();
-            response.setStatusCode(HttpStatus.UNAUTHORIZED);
-            return response.setComplete();
+            return unauthorizedResponse(exchange);
         }
+
+        // 校验redis中的token
+        try {
+            String redisToken = (String) redisUtils.get(token);
+            // redis中没有该token 或 与前端传来的token不同
+            if (StrUtil.isEmpty(redisToken) || redisToken.equals(token)) {
+                return unauthorizedResponse(exchange);
+            }
+        } catch (Exception e) {
+            return unauthorizedResponse(exchange);
+        }
+
         // 4. 传递用户信息
         ServerWebExchange swe = exchange.mutate()
                 .request(builder -> builder.header("user_info", decodedJWT.getToken()))
                 .build();
         // 5. 放行
         return chain.filter(swe);
+    }
+
+    // 设置未授权响应
+    private Mono<Void> unauthorizedResponse(ServerWebExchange exchange) {
+        ServerHttpResponse response = exchange.getResponse();
+        response.setStatusCode(HttpStatus.UNAUTHORIZED);
+        return response.setComplete();
     }
 
     // 排除路径

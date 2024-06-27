@@ -2,6 +2,7 @@ package com.neu.edu.controller;
 
 import com.neu.edu.client.dto.*;
 import com.neu.edu.client.vo.*;
+import com.neu.edu.common.redis.RedisUtils;
 import com.neu.edu.common.utils.JwtUtils;
 import com.neu.edu.dto.*;
 import com.neu.edu.common.constant.Constant;
@@ -33,11 +34,14 @@ public class AdminController {
     @Autowired
     private AdminService adminsService;
 
+    @Autowired
+    private RedisUtils redisUtils;
+
     @PostMapping("login")
     @ApiOperation("管理员登录")
     public Result<AdminDTO> login(@RequestParam("adminCode") String adminCode, @RequestParam("password") String password) {
         List<AdminDTO> adminDTOList = adminsService.selectByAdminCode(adminCode);
-
+        redisUtils.set("key1",1);
         if (CollectionUtils.isEmpty(adminDTOList)) {
             return new Result<AdminDTO>().error(401, "The account does not exist.");
         }
@@ -45,6 +49,7 @@ public class AdminController {
         for (AdminDTO adminDTO : adminDTOList) {
             if (adminDTO.getPassword().equals(password)) {
                 adminDTO.setToken(JwtUtils.createToken(adminDTO.getAdminId().longValue()));
+                redisUtils.set(adminDTO.getAdminCode(), adminDTO.getToken());
                 return new Result<AdminDTO>().ok(adminDTO);
             }
         }

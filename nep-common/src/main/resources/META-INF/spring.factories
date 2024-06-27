@@ -1,3 +1,4 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
   com.neu.edu.common.config.MybatisPlusConfig,\
-  com.neu.edu.common.config.MvcConfig
+  com.neu.edu.common.config.MvcConfig,\
+  com.neu.edu.common.config.GlobalCorsConfig

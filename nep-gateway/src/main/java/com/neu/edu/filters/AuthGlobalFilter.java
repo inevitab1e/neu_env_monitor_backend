@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
 import org.springframework.core.Ordered;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
@@ -53,7 +52,7 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
         try {
             String redisToken = (String) redisUtils.get(token);
             // redis中没有该token 或 与前端传来的token不同
-            if (StrUtil.isEmpty(redisToken) || redisToken.equals(token)) {
+            if (StrUtil.isEmpty(redisToken) || !redisToken.equals(token)) {
                 return unauthorizedResponse(exchange);
             }
         } catch (Exception e) {

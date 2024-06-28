@@ -12,7 +12,7 @@ class NepAdminApplicationTests {
     RedisTemplate<String, Object> redisTemplate;
 
     @Autowired
-    RedisUtils redisUtils;
+    private RedisUtils redisUtils;
 
     @Test
     void contextLoads() {
@@ -25,5 +25,6 @@ class NepAdminApplicationTests {
         Object object = redisUtils.get("insert-test");
 //        Object object = redisTemplate.opsForValue().get("insert-test");
         System.out.println(object);
+//        redisUtils.test();
     }
 }

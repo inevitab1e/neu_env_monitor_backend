@@ -10,7 +10,6 @@ import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.utils.Result;
 import com.neu.edu.service.AdminService;
 
-import feign.Headers;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
@@ -41,7 +40,6 @@ public class AdminController {
     @ApiOperation("管理员登录")
     public Result<AdminDTO> login(@RequestParam("adminCode") String adminCode, @RequestParam("password") String password) {
         List<AdminDTO> adminDTOList = adminsService.selectByAdminCode(adminCode);
-        redisUtils.set("key1",1);
         if (CollectionUtils.isEmpty(adminDTOList)) {
             return new Result<AdminDTO>().error(401, "The account does not exist.");
         }
@@ -49,7 +47,7 @@ public class AdminController {
         for (AdminDTO adminDTO : adminDTOList) {
             if (adminDTO.getPassword().equals(password)) {
                 adminDTO.setToken(JwtUtils.createToken(adminDTO.getAdminId().longValue()));
-                redisUtils.set(adminDTO.getAdminCode(), adminDTO.getToken());
+                redisUtils.set(adminDTO.getToken(), adminDTO.getToken());
                 return new Result<AdminDTO>().ok(adminDTO);
             }
         }

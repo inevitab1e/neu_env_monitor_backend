@@ -9,3 +9,5 @@ spring:
         file-extension: yaml
         shared-configs:
           - data-id: nep-shared-jdbc.yaml
+          - data-id: shared-sentinel.yaml
+          - data-id: shared-redis.yaml

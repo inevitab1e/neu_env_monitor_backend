@@ -6,16 +6,16 @@ feign:
   sentinel:
     enabled: true
 spring:
-  redis:
-    host: localhost
-    port: 6379
-    database: 0
+#  redis:
+#    host: localhost
+#    port: 6379
+#    database: 0
   cloud:
-    sentinel:
-      transport:
-        port: 8719
-        dashboard: localhost:9000
-      http-method-specify: true
+#    sentinel:
+#      transport:
+#        port: 8719
+#        dashboard: localhost:9000
+#      http-method-specify: true
     gateway:
       routes:
         - id: admin-service

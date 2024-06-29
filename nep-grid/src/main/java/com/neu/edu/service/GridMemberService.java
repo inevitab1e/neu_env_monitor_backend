@@ -11,8 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 
- *
  * @author FEI Bo neufeibo@gmail.com
  * @since 1.0.0 2024-06-06
  */
@@ -27,4 +25,6 @@ public interface GridMemberService extends CrudService<GridMemberEntity, GridMem
     List<GridMemberDTO> getGridMemberByLocation(Map<String, Object> params);
 
     Result<AssignmentInfoDTO> getAssignmentByAfId(Long afId);
+
+    GridMemberDTO selectByTel(String tel);
 }

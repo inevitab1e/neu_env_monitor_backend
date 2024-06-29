@@ -55,6 +55,13 @@ public class AdminController {
         return new Result<AdminDTO>().error(401, "Wrong password.");
     }
 
+    @GetMapping("logout")
+    @ApiOperation("管理员登出")
+    public Result logout(AdminDTO dto) {
+        redisUtils.delete(dto.getToken());
+        return new Result().ok(null);
+    }
+
     @GetMapping("page_aqifeedback_detail")
     @ApiOperation("分页得到AQI反馈详情")
     @ApiImplicitParams({

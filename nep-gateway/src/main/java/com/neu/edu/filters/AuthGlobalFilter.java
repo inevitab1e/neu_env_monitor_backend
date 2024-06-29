@@ -78,9 +78,13 @@ public class AuthGlobalFilter implements GlobalFilter, Ordered {
     private boolean isExcluded(String toString) {
         ArrayList<String> paths = new ArrayList<>();
         paths.add("/nep/admin/login");
-        paths.add("/nep/supervisor/login");
+        paths.add("/nep/supervisor/send_msg");
+        paths.add("/nep/supervisor/login_by_pwd");
+        paths.add("/nep/supervisor/login_by_sms");
         paths.add("/nep/supervisor/sign_up");
-        paths.add("/nep/grid/login");
+        paths.add("/nep/supervisor/send_msg");
+        paths.add("/nep/grid/login_by_pwd");
+        paths.add("/nep/grid/login_by_sms");
         paths.add("/nep/statistics/get_province_aqi_index_exceeded_info");
         paths.add("/nep/statistics/get_aqi_count_info");
         paths.add("/nep/statistics/get_aqi_month_count_info");

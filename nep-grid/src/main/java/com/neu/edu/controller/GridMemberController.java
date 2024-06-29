@@ -1,11 +1,12 @@
 package com.neu.edu.controller;
 
-import cn.hutool.core.util.StrUtil;
 import com.neu.edu.common.annotation.LogOperation;
 import com.neu.edu.common.constant.Constant;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.redis.RedisUtils;
-import com.neu.edu.common.utils.*;
+import com.neu.edu.common.utils.JwtUtils;
+import com.neu.edu.common.utils.Result;
+import com.neu.edu.common.utils.UserContext;
 import com.neu.edu.common.validator.ValidatorUtils;
 import com.neu.edu.common.validator.group.AddGroup;
 import com.neu.edu.common.validator.group.DefaultGroup;
@@ -16,7 +17,6 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -25,7 +25,6 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 
 /**
@@ -35,46 +34,12 @@ import java.util.Objects;
 @RestController
 @RequestMapping("nep/grid")
 @Api(tags = "")
-@Slf4j
 public class GridMemberController {
     @Autowired
     private GridMemberService gridMemberService;
 
     @Autowired
     private RedisUtils redisUtils;
-
-    @PostMapping("send_msg")
-    @ApiOperation("发送验证码")
-    public Result sendMsg(@RequestParam Map<String, Object> params) {
-        String tel = (String) params.get("tel");
-        Integer serviceCode = Integer.valueOf(params.get("serviceCode").toString());
-        if (StrUtil.isNotEmpty(tel)) {
-            // 生成随机6位验证码
-            String code = ValidateCodeUtils.generateValidateCode(6).toString();
-            log.info("code={}", code);
-
-            // 调用阿里云提供的短信服务API完成发送短信
-            if (Objects.equals(serviceCode, SMSUtils.VALIDATION_SMS_SERVICE_CODE)) {
-                // 发送登录验证码
-                SMSUtils.sendMessage("NEP", "SMS_468695259", tel, code);
-                // 将生成的验证码缓存到Redis种，设置有效期5分钟
-                redisUtils.set("GridMember_Validation_" + tel, code, RedisUtils.MINUTE_FIVE_EXPIRE);
-            } else if (Objects.equals(serviceCode, SMSUtils.REGISTER_SMS_SERVICE_CODE)) {
-                // 发送注册验证码
-                SMSUtils.sendMessage("NEP", "SMS_468765170", tel, code);
-                // 将生成的验证码缓存到Redis种，设置有效期5分钟
-                redisUtils.set("GridMember_Register_" + tel, code, RedisUtils.MINUTE_FIVE_EXPIRE);
-            } else {
-                return new Result().error("The requested service code does not exist");
-            }
-            // 发送成功
-            Result result = new Result();
-            result.setMsg("The verification code is sent successfully");
-            return result;
-        }
-        // 发送失败
-        return new Result().error("The verification code failed to be sent");
-    }
 
     @GetMapping("page")
     @ApiOperation("分页")
@@ -119,50 +84,6 @@ public class GridMemberController {
         return new Result<GridMemberDTO>().error(401, "Wrong password.");
     }
 
-    @PostMapping("login_by_sms")
-    @ApiOperation("手机号验证码登录")
-    public Result<GridMemberDTO> loginBySms(@RequestParam Map<String, Object> params) {
-        // 手机号
-        String tel = (String) params.get("tel");
-        // 验证码
-        Integer code = Integer.valueOf(params.get("code").toString());
-        // redis中的验证码
-        Integer redisCode = Integer.valueOf(redisUtils.get("GridMember_Validation_" + tel).toString());
-
-        // 验证请求中的验证码是否与redis中的相同
-        if (code == null || !code.equals(redisCode)) {
-            // 验证失败
-            return new Result<GridMemberDTO>().error(401, "Wrong verification code.");
-        }
-
-        // 验证成功
-        // 查询对应用户信息
-        GridMemberDTO gridMemberDTO = gridMemberService.selectByTel(tel);
-        // 没有该用户
-        if (gridMemberDTO == null) {
-            return new Result<GridMemberDTO>().error(204, "The account does not exist. Please register first.");
-        }
-
-        // 查询到该用户 颁发token
-        gridMemberDTO.setToken(JwtUtils.createToken(Long.valueOf(gridMemberDTO.getTel())));
-        redisUtils.set(gridMemberDTO.getToken(), gridMemberDTO.getToken());
-
-        // 删除redis中的验证码
-        redisUtils.delete("GridMember_Validation_" + tel);
-
-        return new Result<GridMemberDTO>().ok(gridMemberDTO);
-    }
-
-    @GetMapping("{tel}")
-    @ApiOperation("查询电话号是否存在")
-    public Result<GridMemberDTO> queryTel(@PathVariable("tel") String tel) {
-        GridMemberDTO gridMemberDTO = gridMemberService.selectByTel(tel);
-        if (gridMemberDTO == null) {
-            return new Result<GridMemberDTO>().error(204, "The account does not exist.");
-        }
-        return new Result<GridMemberDTO>().ok(gridMemberDTO);
-    }
-
     @GetMapping("get_assignments")
     @ApiOperation("根据gmId获取任务")
     public Result<PageData<AssignmentInfoDTO>> getAssignments(@RequestParam Map<String, Object> params) {
@@ -201,13 +122,6 @@ public class GridMemberController {
             return new Result<List<GridMemberDTO>>().error(204, "There are no grid members in this area");
         }
         return new Result<List<GridMemberDTO>>().ok(gridMemberDTOList);
-    }
-
-    @PutMapping("update")
-    @ApiOperation("更新gridmember信息")
-    public Result update(@RequestBody GridMemberDTO dto) {
-        gridMemberService.update(dto);
-        return new Result();
     }
 
 

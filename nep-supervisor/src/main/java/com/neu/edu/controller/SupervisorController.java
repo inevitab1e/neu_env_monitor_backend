@@ -1,12 +1,11 @@
 package com.neu.edu.controller;
 
+import cn.hutool.core.util.StrUtil;
 import com.neu.edu.common.annotation.LogOperation;
 import com.neu.edu.common.constant.Constant;
 import com.neu.edu.common.page.PageData;
 import com.neu.edu.common.redis.RedisUtils;
-import com.neu.edu.common.utils.JwtUtils;
-import com.neu.edu.common.utils.Result;
-import com.neu.edu.common.utils.UserContext;
+import com.neu.edu.common.utils.*;
 import com.neu.edu.common.validator.ValidatorUtils;
 import com.neu.edu.common.validator.group.AddGroup;
 import com.neu.edu.common.validator.group.DefaultGroup;
@@ -19,6 +18,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
@@ -36,12 +36,46 @@ import java.util.Map;
 @RestController
 @RequestMapping("nep/supervisor")
 @Api(tags = "")
+@Slf4j
 public class SupervisorController {
     @Autowired
     private SupervisorService supervisorService;
 
     @Autowired
     private RedisUtils redisUtils;
+
+    @PostMapping("send_msg")
+    @ApiOperation("发送验证码")
+    public Result sendMsg(@RequestParam Map<String, Object> params) {
+        String telId = (String) params.get("telId");
+        Integer serviceCode = Integer.valueOf(params.get("serviceCode").toString());
+        if (StrUtil.isNotEmpty(telId)) {
+            // 生成随机6位验证码
+            String code = ValidateCodeUtils.generateValidateCode(6).toString();
+            log.info("code={}", code);
+
+            // 调用阿里云提供的短信服务API完成发送短信
+            if (serviceCode == SMSUtils.VALIDATION_SMS_SERVICE_CODE) {
+                // 发送登录验证码
+                SMSUtils.sendMessage("NEP", "SMS_468695259", telId, code);
+                // 将生成的验证码缓存到Redis种，设置有效期5分钟
+                redisUtils.set("Supervisor_Validation_" + telId, code, RedisUtils.MINUTE_FIVE_EXPIRE);
+            } else if (serviceCode == SMSUtils.REGISTER_SMS_SERVICE_CODE) {
+                // 发送注册验证码
+                SMSUtils.sendMessage("NEP", "SMS_468765170", telId, code);
+                // 将生成的验证码缓存到Redis种，设置有效期5分钟
+                redisUtils.set("Supervisor_Register_" + telId, code, RedisUtils.MINUTE_FIVE_EXPIRE);
+            } else {
+                return new Result().error("The requested service code does not exist");
+            }
+            // 发送成功
+            Result result = new Result();
+            result.setMsg("The verification code is sent successfully");
+            return result;
+        }
+        // 发送失败
+        return new Result().error("The verification code failed to be sent");
+    }
 
     @GetMapping("page")
     @ApiOperation("分页")
@@ -60,20 +94,21 @@ public class SupervisorController {
 
     @GetMapping("{telId}")
     @ApiOperation("信息")
-    @RequiresPermissions("demo:supervisor:info")
     public Result<SupervisorDTO> get(@PathVariable("telId") String telId) {
         SupervisorDTO data = supervisorService.selectByTelId(telId);
-
+        if (data == null) {
+            return new Result<SupervisorDTO>().error(204, "The account does not exist.");
+        }
         return new Result<SupervisorDTO>().ok(data);
     }
 
-    @PostMapping("login")
-    @ApiOperation("登录")
-    public Result<SupervisorDTO> login(@RequestParam("telId") String telId, @RequestParam("password") String password) {
+    @PostMapping("login_by_pwd")
+    @ApiOperation("账号密码登录")
+    public Result<SupervisorDTO> loginByPwd(@RequestParam("telId") String telId, @RequestParam("password") String password) {
         SupervisorDTO supervisorDTO = supervisorService.selectByTelId(telId);
 
         if (supervisorDTO == null) {
-            return new Result<SupervisorDTO>().error(401, "The account does not exist.");
+            return new Result<SupervisorDTO>().error(204, "The account does not exist. Please register first.");
         }
 
         if (supervisorDTO.getPassword().equals(password)) {
@@ -83,6 +118,41 @@ public class SupervisorController {
         }
 
         return new Result<SupervisorDTO>().error(401, "Wrong password.");
+    }
+
+    @PostMapping("login_by_sms")
+    @ApiOperation("手机号验证码登录")
+    public Result<SupervisorDTO> loginBySms(@RequestParam Map<String, Object> params) {
+        // 手机号
+        String telId = (String) params.get("telId");
+        // 验证码
+        Integer code = Integer.valueOf(params.get("code").toString());
+        // redis中的验证码
+        Integer redisCode = Integer.valueOf(redisUtils.get("Supervisor_Validation_" + telId).toString());
+
+        // 验证请求中的验证码是否与redis中的相同
+        if (code == null || !code.equals(redisCode)) {
+            // 验证失败
+            return new Result<SupervisorDTO>().error(401, "Wrong verification code.");
+        }
+
+        // 验证成功
+        // 查询对应用户信息
+        SupervisorDTO supervisorDTO = supervisorService.selectByTelId(telId);
+        // 没有该用户
+        if (supervisorDTO == null) {
+            return new Result<SupervisorDTO>().error(204, "The account does not exist. Please register first.");
+        }
+
+        // 查询到该用户 颁发token
+        supervisorDTO.setToken(JwtUtils.createToken(Long.valueOf(supervisorDTO.getTelId())));
+        redisUtils.set(supervisorDTO.getToken(), supervisorDTO.getToken());
+
+        // 删除redis中的验证码
+        redisUtils.delete("Supervisor_Validation_" + telId);
+
+        return new Result<SupervisorDTO>().ok(supervisorDTO);
+
     }
 
     @GetMapping("aqi_list")
@@ -109,15 +179,29 @@ public class SupervisorController {
         return new Result();
     }
 
-
     @PostMapping("sign_up")
     @ApiOperation("注册")
     @LogOperation("注册")
-    public Result signUp(@RequestBody SupervisorDTO dto) {
+    public Result signUp(@RequestBody Map<String, Object> params) {
+        // 获取前端数据
+        Integer code = Integer.valueOf(params.get("code").toString());
+        String telId = (String) params.get("telId");
+        // 获取redis中的验证码
+        Integer redisCode = (Integer) redisUtils.get("GridMember_Register_" + telId);
+        // 前端的验证码是否与redis中一致
+        if (code == null || code.equals(redisCode)) {
+            return new Result().error(401, "Wrong verification code.");
+        }
+
+        // 转换数据类型
+        SupervisorDTO dto = ConvertUtils.sourceToTarget(params, SupervisorDTO.class);
+
         //效验数据
         ValidatorUtils.validateEntity(dto, AddGroup.class, DefaultGroup.class);
 
         supervisorService.save(dto);
+        // 删除redis中的验证码
+        redisUtils.delete("GridMember_Register_" + telId);
 
         return new Result();
     }

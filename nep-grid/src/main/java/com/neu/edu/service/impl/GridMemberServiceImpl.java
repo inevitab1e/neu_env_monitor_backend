@@ -142,6 +142,18 @@ public class GridMemberServiceImpl extends CrudServiceImpl<GridMemberDao, GridMe
         return new Result<AssignmentInfoDTO>().ok(data);
     }
 
+    @Override
+    public GridMemberDTO selectByTel(String tel) {
+        QueryWrapper<GridMemberEntity> wrapper = new QueryWrapper<>();
+        wrapper.eq("tel", tel);
+        GridMemberEntity gridMemberEntity = baseDao.selectOne(wrapper);
+        if (gridMemberEntity == null) {
+            return null;
+        }
+        GridMemberDTO gridMemberDTO = ConvertUtils.sourceToTarget(gridMemberEntity, GridMemberDTO.class);
+        return gridMemberDTO;
+    }
+
     /**
      * 抽取的搭建AssignmentInfoDTO的方法
      *
